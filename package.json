@@ -1,0 +1,16 @@
+{
+  "name": "heroku-deploy",
+  "version": "1.0.0",
+  "description": "A simple github action that dynamically deploys an app to heroku",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test",
+    "start": "node index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.2.0"
+  }
+}

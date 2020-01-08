@@ -1,0 +1,18 @@
+name: 'Heroku Deploy'
+description: 'Deploy an app to Heroku'
+inputs:
+  heroku_api_key:
+    description: 'This will be used for authentication. You can find it in your heroku homepage account settings'
+    required: true
+  heroku_email:
+    description: 'Email that you use with heroku'
+    required: true
+  heroku_app_name:
+    description: 'The appname to use for deploying/updating'
+    required: true
+outputs:
+  status:
+    description: 'The Success/Failure of the action'
+runs:
+  using: 'node12'
+  main: 'index.js'
