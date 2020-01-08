@@ -1,5 +1,10 @@
-const { exec } = require('child_process');
+const exec = require("await-exec");
 
-exec('heroku git:remote --app 12345', (err, stdout, stderr) =>
-  console.log({ err, stdout, stderr })
-);
+(async function() {
+  try {
+    const res = await exec("echo 'hello world'");
+    console.log(res);
+  } catch (err) {
+    console.log(err);
+  }
+})();

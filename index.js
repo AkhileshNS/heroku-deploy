@@ -1,5 +1,6 @@
 const core = require("@actions/core");
-const { execSync } = require("child_process");
+const Exec = require("await-exec");
+const { exec } = require("child_process");
 
 // Support Functions
 const createCatFile = ({ email, api_key }) => `cat >~/.netrc <<EOF
@@ -11,44 +12,34 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const defErrHandler = (successMsg, final) => (err, strout, strerr) => {
-  if (err) {
-    core.setFailed(strerr);
-  } else {
-    if (!final) {
-      console.log(successMsg);
-    } else {
-      core.setOutput(successMsg);
-    }
+(async () => {
+  try {
+    // Input Variables
+    let heroku = {};
+    heroku.api_key = core.getInput("heroku_api_key");
+    heroku.email = core.getInput("heroku_email");
+    heroku.app_name = core.getInput("heroku_app_name");
+
+    await Exec(createCatFile(heroku));
+    console.log("Create and write to ~./netrc");
+
+    await Exec("heroku login");
+    console.log("Successfully logged into heroku");
+
+    exec("heroku git:remote --app " + heroku.app_name, async err => {
+      try {
+        if (err) {
+          await Exec("heroku create " + heroku.app_name);
+          console.log("Successfully created a new heroku app");
+        }
+
+        await Exec("git push heroku HEAD:refs/heads/master");
+        console.log("Successfully deployed heroku app");
+      } catch (err) {
+        core.setFailed(err);
+      }
+    });
+  } catch (err) {
+    core.setFailed(err);
   }
-};
-
-try {
-  // Input Variables
-  let heroku = {};
-  heroku.api_key = core.getInput("heroku_api_key");
-  heroku.email = core.getInput("heroku_email");
-  heroku.app_name = core.getInput("heroku_app_name");
-
-  // core.setOutput('key', 'value');
-  execSync(
-    createCatFile(heroku),
-    defErrHandler("Put login details in ~/.netrc")
-  );
-  execSync("heroku login", defErrHandler("Logged into heroku"));
-  execSync("heroku git:remote --app " + heroku.app_name, err => {
-    if (err) {
-      execSync(
-        "heroku create " + heroku.app_name,
-        defErrHandler("Created new project with name " + heroku.app_name)
-      );
-    }
-
-    execSync(
-      "git push heroku HEAD:refs/heads/master",
-      defErrHandler("Successfully deployed app", true)
-    );
-  });
-} catch (error) {
-  core.setFailed(error.message);
-}
+})();
