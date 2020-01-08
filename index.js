@@ -1,5 +1,5 @@
 const core = require("@actions/core");
-const { exec } = require("child_process");
+const { execSync } = require("child_process");
 
 // Support Functions
 const createCatFile = ({ email, api_key }) => `cat >~/.netrc <<EOF
@@ -31,17 +31,20 @@ try {
   heroku.app_name = core.getInput("heroku_app_name");
 
   // core.setOutput('key', 'value');
-  exec(createCatFile(heroku), defErrHandler("Put login details in ~/.netrc"));
-  exec("heroku login", defErrHandler("Logged into heroku"));
-  exec("heroku git:remote --app " + heroku.app_name, err => {
+  execSync(
+    createCatFile(heroku),
+    defErrHandler("Put login details in ~/.netrc")
+  );
+  execSync("heroku login", defErrHandler("Logged into heroku"));
+  execSync("heroku git:remote --app " + heroku.app_name, err => {
     if (err) {
-      exec(
+      execSync(
         "heroku create " + heroku.app_name,
         defErrHandler("Created new project with name " + heroku.app_name)
       );
     }
 
-    exec(
+    execSync(
       "git push heroku HEAD:refs/heads/master",
       defErrHandler("Successfully deployed app", true)
     );
