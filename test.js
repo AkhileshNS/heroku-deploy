@@ -1,10 +1,8 @@
-const exec = require("await-exec");
+const { execSync } = require("child_process");
 
-(async function() {
-  try {
-    const res = await exec("echo 'hello world'");
-    console.log(res);
-  } catch (err) {
-    console.log(err);
-  }
-})();
+try {
+  const res = execSync("echo 'hello world'").toString();
+  console.log({ res });
+} catch (err) {
+  console.log({ err });
+}

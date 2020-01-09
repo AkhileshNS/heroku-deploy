@@ -1,6 +1,5 @@
 const core = require("@actions/core");
-const Exec = require("await-exec");
-const { exec } = require("child_process");
+const { execSync } = require("child_process");
 
 // Support Functions
 const createCatFile = ({ email, api_key }) => `cat >~/.netrc <<EOF
@@ -12,34 +11,28 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-(async () => {
+// Input Variables
+let heroku = {};
+heroku.api_key = core.getInput("heroku_api_key");
+heroku.email = core.getInput("heroku_email");
+heroku.app_name = core.getInput("heroku_app_name");
+
+try {
+  execSync(createCatFile(heroku));
+  console.log("Created and wrote to ~./netrc");
+  execSync("heroku login");
+  console.log("Successfully logged into heroku");
+
   try {
-    // Input Variables
-    let heroku = {};
-    heroku.api_key = core.getInput("heroku_api_key");
-    heroku.email = core.getInput("heroku_email");
-    heroku.app_name = core.getInput("heroku_app_name");
-
-    await Exec(createCatFile(heroku));
-    console.log("Create and write to ~./netrc");
-
-    await Exec("heroku login");
-    console.log("Successfully logged into heroku");
-
-    exec("heroku git:remote --app " + heroku.app_name, async err => {
-      try {
-        if (err) {
-          await Exec("heroku create " + heroku.app_name);
-          console.log("Successfully created a new heroku app");
-        }
-
-        await Exec("git push heroku HEAD:refs/heads/master");
-        console.log("Successfully deployed heroku app");
-      } catch (err) {
-        core.setFailed(err);
-      }
-    });
+    execSync("heroku git:remote --app " + heroku.app_name);
+    console.log("Added git remote heroku");
   } catch (err) {
-    core.setFailed(err);
+    execSync("heroku create " + heroku.app_name);
+    console.log("Successfully created a new heroku app");
   }
-})();
+
+  execSync("git push heroku HEAD:refs/heads/master");
+  core.setOutput("status", "Successfully deployed heroku app");
+} catch (err) {
+  core.setFailed(err.toString());
+}
