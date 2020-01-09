@@ -25,14 +25,14 @@ try {
   console.log("Successfully logged into heroku");
 
   try {
+    execSync("heroku git:remote --app " + heroku.app_name);
+    console.log("Added git remote heroku");
+  } catch (err) {
     execSync(
-      "heroku git:remote --app " +
+      "heroku create " +
         heroku.app_name +
         (heroku.buildpack ? " --buildpack " + heroku.buildpack : null)
     );
-    console.log("Added git remote heroku");
-  } catch (err) {
-    execSync("heroku create " + heroku.app_name);
     console.log("Successfully created a new heroku app");
   }
 
