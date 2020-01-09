@@ -31,7 +31,9 @@ try {
     execSync(
       "heroku create " +
         heroku.app_name +
-        (heroku.buildpack ? " --buildpack " + heroku.buildpack : null)
+        (heroku.buildpack !== "null"
+          ? " --buildpack " + heroku.buildpack
+          : null)
     );
     console.log("Successfully created a new heroku app");
   }
