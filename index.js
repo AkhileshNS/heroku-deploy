@@ -16,6 +16,7 @@ let heroku = {};
 heroku.api_key = core.getInput("heroku_api_key");
 heroku.email = core.getInput("heroku_email");
 heroku.app_name = core.getInput("heroku_app_name");
+heroku.buildpack = core.getInput("buildpack");
 
 try {
   execSync(createCatFile(heroku));
@@ -24,7 +25,11 @@ try {
   console.log("Successfully logged into heroku");
 
   try {
-    execSync("heroku git:remote --app " + heroku.app_name);
+    execSync(
+      "heroku git:remote --app " +
+        heroku.app_name +
+        (heroku.buildpack ? " --buildpack " + heroku.buildpack : null)
+    );
     console.log("Added git remote heroku");
   } catch (err) {
     execSync("heroku create " + heroku.app_name);
