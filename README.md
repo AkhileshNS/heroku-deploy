@@ -1,6 +1,5 @@
 # Heroku Deploy
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/AkhileshNS/heroku-deploy.svg)
 ![GitHub issues](https://img.shields.io/github/issues/AkhileshNS/heroku-deploy.svg)
 ![GitHub](https://img.shields.io/github/license/AkhileshNS/heroku-deploy.svg)
 
