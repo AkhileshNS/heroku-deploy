@@ -34,7 +34,7 @@ git push heroku HEAD:refs/heads/master
 
 In order to use the action in your workflow, just add in your _.github/workflows/YOURACTION.yml_
 
-```yaml
+```
 name: Deploy
 
 on:
@@ -45,14 +45,14 @@ on:
 jobs:
 	build:
 		runs-on: ubuntu-latest
-		steps:
-			- uses: actions/checkout@v1
-			- uses: akhileshns/heroku-deploy@master # This is the action
-			  with:
-			  	heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-			  	heroku_app_name: "YOUR APP's NAME (must be unique to heroku)"
-			  	heroku_email: "YOUR EMAIL"
-			  	buildpack: "SOME BUILDPACK [OPTIONAL]"
+			steps:
+				- uses: actions/checkout@v1
+				- uses: akhileshns/heroku-deploy@master # This is the action
+					with:
+						heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+						heroku_app_name: "YOUR APP's NAME (must be unique to heroku)"
+						heroku_email: "YOUR EMAIL"
+						buildpack: "SOME BUILDPACK [OPTIONAL]"
 ```
 
 You can if you want pass the heroku_app_name, heroku_email and buildpack through github secrets as well if you want, just make sure that atleast your heroku_api_key is passed via GitHub Secrets.
