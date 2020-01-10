@@ -7,8 +7,20 @@
     "test": "node test",
     "start": "node index"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkhileshNS/heroku-deploy.git"
+  },
+  "keywords": [
+    "heroku",
+    "github",
+	"github-actions"
+  ]
+  "author": "AkhileshNS",
+  "bugs": {
+    "url": "https://github.com/AkhileshNS/heroku-deploy/issues"
+  },
+  "homepage": "https://github.com/AkhileshNS/heroku-deploy#readme",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.0"

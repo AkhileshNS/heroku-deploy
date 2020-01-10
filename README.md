@@ -1,4 +1,9 @@
 # Heroku Deploy
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/AkhileshNS/heroku-deploy.svg)
+![GitHub issues](https://img.shields.io/github/issues/AkhileshNS/heroku-deploy.svg)
+![GitHub](https://img.shields.io/github/license/AkhileshNS/heroku-deploy.svg)
+
 This is a very simple GitHub action that allows you to deploy to Heroku. The action works by running the following commands in shell via NodeJS:-
 
 ```bash
@@ -56,3 +61,11 @@ You can if you want pass the heroku_app_name, heroku_email and buildpack through
 **Note.** You can find the secrets tab in your project's settings
 
 **Also Note.** Be careful with your appname, cuz the action either deploys to an existing app or creates a new one if it doesn't exist. So if you accidently change it after deploying it once already, the action won't fail, it'll just create a new dyno and if you are on a paid plan, heroku can be expensive. On that note, always check the logs of your actions to make sure everything is A-OK.
+
+**Also Also Note.** Sorry this is the last I promise, if you're using the above exact workflow code, keep in mind that it deploys whenever you make a change to the master branch (Even README updates which have nothing to do with application code) and that might not be very efficient for you, have a look through the github actions docs to customize when the action should trigger. 
+
+(I would recommend making a separate dev branch and setting up the action to trigger upon pull request to the master branch) 
+
+# License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/AkhileshNS/heroku-deploy/blob/master/LICENSE) file for details
