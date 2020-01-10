@@ -1,5 +1,8 @@
 name: "Deploy to Heroku"
 description: "Deploy an app to Heroku"
+branding:
+  icon: "upload-cloud"
+  color: "purple"
 inputs:
   heroku_api_key:
     description: "This will be used for authentication. You can find it in your heroku homepage account settings"
