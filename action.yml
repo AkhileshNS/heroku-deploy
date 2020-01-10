@@ -1,4 +1,4 @@
-name: "Heroku Deploy"
+name: "Deploy to Heroku"
 description: "Deploy an app to Heroku"
 inputs:
   heroku_api_key:
