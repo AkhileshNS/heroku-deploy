@@ -46,7 +46,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v1
+        - uses: actions/checkout@v2
           with:
             fetch-depth: 0
         - uses: akhileshns/heroku-deploy@master # This is the action
