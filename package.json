@@ -15,7 +15,7 @@
     "heroku",
     "github",
 	"github-actions"
-  ]
+  ],
   "author": "AkhileshNS",
   "bugs": {
     "url": "https://github.com/AkhileshNS/heroku-deploy/issues"
