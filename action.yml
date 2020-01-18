@@ -18,6 +18,9 @@ inputs:
   branch:
     description: "The branch that you would like to deploy to Heroku"
     default: "master"
+  dontuseforce:
+    description: "Set this to 1 if you don't want to use --force when switching branches"
+    default: 0
 outputs:
   status:
     description: "The Success/Failure of the action"
