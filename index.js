@@ -17,6 +17,7 @@ heroku.api_key = core.getInput("heroku_api_key");
 heroku.email = core.getInput("heroku_email");
 heroku.app_name = core.getInput("heroku_app_name");
 heroku.buildpack = core.getInput("buildpack");
+heroku.branch = core.getInput("branch");
 
 try {
   execSync(createCatFile(heroku));
@@ -36,7 +37,7 @@ try {
     console.log("Successfully created a new heroku app");
   }
 
-  execSync("git push heroku HEAD:refs/heads/master");
+  execSync(`git push heroku HEAD:refs/heads/${heroku.branch}`);
   core.setOutput("status", "Successfully deployed heroku app");
 } catch (err) {
   core.setFailed(err.toString());

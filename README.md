@@ -55,6 +55,7 @@ jobs:
           heroku_app_name: "YOUR APP's NAME (must be unique to heroku)"
           heroku_email: "YOUR EMAIL"
           buildpack: "SOME BUILDPACK [OPTIONAL]"
+          branch: "DEFAULTS TO 'master'"
 ```
 
 You can if you want pass the heroku_app_name, heroku_email and buildpack through github secrets as well if you want, just make sure that atleast your heroku_api_key is passed via GitHub Secrets.
@@ -63,9 +64,9 @@ You can if you want pass the heroku_app_name, heroku_email and buildpack through
 
 **Also Note.** Be careful with your appname, cuz the action either deploys to an existing app or creates a new one if it doesn't exist. So if you accidently change it after deploying it once already, the action won't fail, it'll just create a new dyno and if you are on a paid plan, heroku can be expensive. On that note, always check the logs of your actions to make sure everything is A-OK.
 
-**Also Also Note.** Sorry this is the last I promise, if you're using the above exact workflow code, keep in mind that it deploys whenever you make a change to the master branch (Even README updates which have nothing to do with application code) and that might not be very efficient for you, have a look through the github actions docs to customize when the action should trigger. 
+**Also Also Note.** Sorry this is the last I promise, if you're using the above exact workflow code, keep in mind that it deploys whenever you make a change to the master branch (Even README updates which have nothing to do with application code) and that might not be very efficient for you, have a look through the github actions docs to customize when the action should trigger.
 
-(I would recommend making a separate dev branch and setting up the action to trigger upon pull request to the master branch) 
+(I would recommend making a separate dev branch and setting up the action to trigger upon pull request to the master branch)
 
 # License
 
