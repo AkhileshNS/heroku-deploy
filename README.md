@@ -55,7 +55,7 @@ jobs:
           heroku_app_name: "YOUR APP's NAME (must be unique to heroku)"
           heroku_email: "YOUR EMAIL"
           buildpack: "SOME BUILDPACK [OPTIONAL]"
-          branch: "DEFAULTS TO 'master'"
+          branch: "DEFAULTS TO 'HEAD'"
 ```
 
 You can if you want pass the heroku_app_name, heroku_email and buildpack through github secrets as well if you want, just make sure that atleast your heroku_api_key is passed via GitHub Secrets.

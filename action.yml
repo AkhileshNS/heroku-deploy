@@ -17,7 +17,7 @@ inputs:
     description: "An optional buildpack to use when creating the heroku application"
   branch:
     description: "The branch that you would like to deploy to Heroku"
-    default: "master"
+    default: "HEAD"
   dontuseforce:
     description: "Set this to 1 if you don't want to use --force when switching branches"
     default: 0
