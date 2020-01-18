@@ -19,6 +19,8 @@ heroku.app_name = core.getInput("heroku_app_name");
 heroku.buildpack = core.getInput("buildpack");
 heroku.branch = core.getInput("branch");
 heroku.dontuseforce = core.getInput("dontuseforce");
+console.log("Branch: " + heroku.branch);
+console.log("Don't Use Force: " + heroku.dontuseforce);
 
 try {
   execSync(createCatFile(heroku));
