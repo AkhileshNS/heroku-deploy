@@ -49,7 +49,10 @@ try {
       execSync(`git push heroku ${heroku.branch}:master --force`);
     }
   }
-  core.setOutput("status", "Successfully deployed heroku app");
+  core.setOutput(
+    "status",
+    "Successfully deployed heroku app from branch " + heroku.branch
+  );
 } catch (err) {
   core.setFailed(err.toString());
 }
