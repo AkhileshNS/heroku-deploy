@@ -52,8 +52,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - uses: akhileshns/heroku-deploy@v2.0.1 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
