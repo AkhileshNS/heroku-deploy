@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: akhileshns/heroku-deploy@v2.0.0 # This is the action
+      - uses: akhileshns/heroku-deploy@v2.0.1 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
