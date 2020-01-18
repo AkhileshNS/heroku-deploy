@@ -23,6 +23,7 @@ console.log("Branch: " + heroku.branch);
 console.log("Don't Use Force: " + heroku.dontuseforce);
 
 try {
+  execSync("git branch -v");
   execSync(createCatFile(heroku));
   console.log("Created and wrote to ~./netrc");
   execSync("heroku login");
