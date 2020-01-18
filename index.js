@@ -18,7 +18,6 @@ heroku.email = core.getInput("heroku_email");
 heroku.app_name = core.getInput("heroku_app_name");
 heroku.buildpack = core.getInput("buildpack");
 heroku.branch = core.getInput("branch");
-heroku.dontuseforce = core.getInput("dontuseforce");
 
 try {
   execSync("git fetch --prune --unshallow");
@@ -42,12 +41,11 @@ try {
   try {
     execSync(`git push heroku ${heroku.branch}:master`);
   } catch (err) {
-    console.log(err);
     console.log(
       "Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. (If you want to avoid this, set dontuseforce to 1 in with: of .github/workflows/action.yml"
     );
-    if (!heroku.dontuseforce) {
-      execSync(`git push heroku ${heroku.branch}:master -f`);
+    if (!core.getInput("dontuseforce")) {
+      execSync(`git push heroku ${heroku.branch}:master --force`);
     }
   }
   core.setOutput("status", "Successfully deployed heroku app");
