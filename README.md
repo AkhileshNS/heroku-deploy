@@ -66,6 +66,8 @@ You can if you want pass the heroku_app_name, heroku_email and buildpack through
 
 # Important Notes
 
+- Make sure you are using **v2**' of the **actions/checkout** action and do not add the **fetch-depth** flag which is available as an option to the actions/checkout@v2 action. (Note. This is because the action expects a shallow clone of the repo and older versions of the actions/checkout action makes complete clones instead. Additionally, keep in mind that the action will unshallow your repo's clone so that renders the fetch-depth option useless if you are using the v2 of the actions/checkout action)
+
 - You can find the secrets tab in your project's settings
 
 - Be careful with your appname, cuz the action either deploys to an existing app or creates a new one if it doesn't exist. So if you accidently change it after deploying it once already, the action won't fail, it'll just create a new dyno and if you are on a paid plan, heroku can be expensive. On that note, always check the logs of your actions to make sure everything is A-OK.
