@@ -51,7 +51,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2 # IMPORTANT: use v2 and do not set any fetch-depth flags because the action will unshallow your repo automatically
       - uses: akhileshns/heroku-deploy@v2.0.2 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
