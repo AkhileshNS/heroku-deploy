@@ -22,7 +22,7 @@ heroku.dontuseforce = core.getInput("dontuseforce");
 heroku.useDocker = core.getInput("useDocker"); 
 
 try {
-  execSync("git fetch --prune --unshallow");
+  //execSync("git fetch --prune --unshallow");
   execSync(createCatFile(heroku));
   console.log("Created and wrote to ~./netrc");
   execSync("heroku login");
