@@ -23,15 +23,15 @@ heroku.useDocker = core.getInput("useDocker");
 
 function deploy(useForce) {
 
-    const force = useForce? " --force": ""; 
+    const force = useForce? "--force": ""; 
 
     if (useForce) {
 
-        execSync("heroku container:push web" + force); 
-        execSynd("heroku container:release web" + force);
+        execSync(`heroku container:push web --app ${heroku.app_name} ${force}`); 
+        execSynd(`heroku container:release web ${force}`);
     } else {
 
-        execSync(`git push heroku ${heroku.branch}:master` + force); 
+        execSync(`git push heroku ${heroku.branch}:master ${force}`); 
     }
 }
 
