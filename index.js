@@ -27,8 +27,8 @@ function deploy(useForce) {
 
     if (useForce) {
 
-        execSync(`heroku container:push web --app ${heroku.app_name} ${force}`); 
-        execSynd(`heroku container:release web ${force}`);
+        execSync(`heroku container:push web --app ${heroku.app_name}`); 
+        execSynd(`heroku container:release web`);
     } else {
 
         execSync(`git push heroku ${heroku.branch}:master ${force}`); 
