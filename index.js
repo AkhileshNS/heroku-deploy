@@ -25,7 +25,7 @@ function deploy(useForce) {
 
     const force = useForce? "--force": ""; 
 
-    if (useForce) {
+    if (heroku.useDocker) {
 
         execSync(`heroku container:push web --app ${heroku.app_name}`); 
         execSynd(`heroku container:release web`);
