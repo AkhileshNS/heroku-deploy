@@ -19,6 +19,7 @@ heroku.app_name = core.getInput("heroku_app_name");
 heroku.buildpack = core.getInput("buildpack");
 heroku.branch = core.getInput("branch");
 heroku.dontuseforce = core.getInput("dontuseforce");
+heroku.useDocker = core.getInput("useDocker"); 
 
 try {
   execSync("git fetch --prune --unshallow");
@@ -38,16 +39,31 @@ try {
     );
     console.log("Successfully created a new heroku app");
   }
+    
+  function deploy(useForce) {
+        
+        const force = useForce? " --force": ""; 
+      
+        if (useDocker) {
+            
+            execSync("heroku container:push web" + force); 
+            execSynd("heroku container:release web" + force);
+        } else {
+            
+            execSync(`git push heroku ${heroku.branch}:master` + force); 
+        }
+  }
 
   try {
-    execSync(`git push heroku ${heroku.branch}:master`);
+    
+      deploy(false);   
   } catch (err) {
-    console.log(
-      "Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. (If you want to avoid this, set dontuseforce to 1 in with: of .github/workflows/action.yml"
-    );
-    if (!heroku.dontuseforce) {
-      execSync(`git push heroku ${heroku.branch}:master --force`);
-    }
+    
+      LLconsole.log(
+        "Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. (If you want to avoid this, set dontuseforce to 1 in with: of .github/workflows/action.yml"
+      );
+      
+    deploy(!heroku.dontUseForce);
   }
   core.setOutput(
     "status",
