@@ -56,6 +56,10 @@ try {
     execSync(createCatFile(heroku));
     console.log("Created and wrote to ~./netrc");
     execSync("heroku login");
+    if (heroku.useDocker) {
+        
+        execSync("heroku container:login"); 
+    }
     console.log("Successfully logged into heroku");
 
     if (!heroku.useDocker) {
