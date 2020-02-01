@@ -19,13 +19,13 @@ heroku.app_name = core.getInput("heroku_app_name");
 heroku.buildpack = core.getInput("buildpack");
 heroku.branch = core.getInput("branch");
 heroku.dontuseforce = core.getInput("dontuseforce");
-heroku.useDocker = core.getInput("useDocker"); 
+heroku.usedocker = core.getInput("usedocker");
 
-function deploy(useForce) {
+const deploy = (useForce) => {
 
     const force = useForce? "--force": ""; 
 
-    if (heroku.useDocker) {
+    if (heroku.usedocker) {
 
         execSync(`heroku container:push web --app ${heroku.app_name}`); 
         execSync(`heroku container:release web`);
@@ -33,9 +33,9 @@ function deploy(useForce) {
 
         execSync(`git push heroku ${heroku.branch}:master ${force}`); 
     }
-}
+};
 
-function addRemote() {
+const addRemote = () => {
     try {
 
         execSync("heroku git:remote --app " + heroku.app_name);
@@ -49,24 +49,25 @@ function addRemote() {
         );
         console.log("Successfully created a new heroku app");
       }
-}
+};
 
 try {
-   //execSync("git fetch --prune --unshallow");
-    execSync(createCatFile(heroku));
+
+
+	  if (!heroku.usedocker)
+	      execSync("git fetch --prune --unshallow");
+
+	  execSync(createCatFile(heroku));
     console.log("Created and wrote to ~./netrc");
+
     execSync("heroku login");
-    if (heroku.useDocker) {
-        
+    if (heroku.usedocker)
         execSync("heroku container:login"); 
-    }
+
     console.log("Successfully logged into heroku");
 
-    if (!heroku.useDocker) {
-        
+    if (!heroku.usedocker)
         addRemote(); 
-    }
-   
 
     try {
     
@@ -77,9 +78,9 @@ try {
             Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. 
             (If you want to avoid this, set dontuseforce to 1 in with: of .github/workflows/action.yml. 
             Specifically, the error was: ${err}
-        `)
+        `);
       
-        deploy(!heroku.dontUseForce);
+        deploy(!heroku.dontuseforce);
     }
       
     core.setOutput(
