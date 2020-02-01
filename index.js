@@ -11,6 +11,37 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
+const deploy = (useForce) => {
+
+    const force = useForce? "--force": "";
+
+    if (heroku.usedocker) {
+
+        execSync(`heroku container:push web --app ${heroku.app_name}`);
+        execSync(`heroku container:release web`);
+    } else {
+
+        execSync(`git push heroku ${heroku.branch}:master ${force}`);
+    }
+};
+
+const addRemote = () => {
+    try {
+
+        execSync("heroku git:remote --app " + heroku.app_name);
+        console.log("Added git remote heroku");
+    } catch (err) {
+
+        execSync(
+          "heroku create " +
+          heroku.app_name +
+          (heroku.buildpack ? " --buildpack " + heroku.buildpack : "")
+        );
+        console.log("Successfully created a new heroku app");
+    }
+};
+
+
 // Input Variables
 let heroku = {};
 heroku.api_key = core.getInput("heroku_api_key");
@@ -21,38 +52,8 @@ heroku.branch = core.getInput("branch");
 heroku.dontuseforce = core.getInput("dontuseforce");
 heroku.usedocker = core.getInput("usedocker");
 
-const deploy = (useForce) => {
-
-    const force = useForce? "--force": ""; 
-
-    if (heroku.usedocker) {
-
-        execSync(`heroku container:push web --app ${heroku.app_name}`); 
-        execSync(`heroku container:release web`);
-    } else {
-
-        execSync(`git push heroku ${heroku.branch}:master ${force}`); 
-    }
-};
-
-const addRemote = () => {
-    try {
-
-        execSync("heroku git:remote --app " + heroku.app_name);
-        console.log("Added git remote heroku");
-      } catch (err) {
-
-          execSync(
-          "heroku create " +
-            heroku.app_name +
-            (heroku.buildpack ? " --buildpack " + heroku.buildpack : "")
-        );
-        console.log("Successfully created a new heroku app");
-      }
-};
-
+// Program logic
 try {
-
 
 	  if (!heroku.usedocker)
 	      execSync("git fetch --prune --unshallow");
