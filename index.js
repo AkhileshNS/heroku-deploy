@@ -46,6 +46,8 @@ heroku.branch = core.getInput("branch");
 heroku.dontuseforce = core.getInput("dontuseforce");
 heroku.usedocker = core.getInput("usedocker");
 
+console.log(heroku);
+
 // Program logic
 try {
   // Check if using Docker
