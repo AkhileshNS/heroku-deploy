@@ -5,6 +5,8 @@
 
 This is a very simple GitHub action that allows you to deploy to Heroku. The action works by running the following commands in shell via NodeJS:-
 
+# Working
+
 ```bash
 # This will create and write to a file called .netrc
 # Some useful Stackoverflow answers pointed out that heroku
@@ -21,6 +23,8 @@ machine git.heroku.com
 EOF
 
 heroku login
+# If usedocker is set to true, then additionally the below command is run
+# >heroku container:login
 
 # The APPNAME needs to be passed via the Action
 heroku git:remote --app APP_NAME
@@ -30,12 +34,20 @@ heroku git:remote --app APP_NAME
 # >heroku create APP_NAME --buildpack BUILDPACK
 
 # The BRANCH can be passed via the Action. If not passed, it defaults to 'HEAD'
-git push heroku BRANCH:master
+git push heroku BRANCH:refs/heads/master
 # if the above command fails, then the action will run
-# >git push heroku BRANCH:master --force
+# >git push heroku BRANCH:refs/heads/master --force
 # This is to ensure that your app gets updated should you choose to update from a different branch that is behind your current one
 # But this might not be convenient for you in which case, you can switch off the behaviour by setting dontuseforce to true
+
+# The following scenario takes place if the usedocker flag is set to true
+# instead of git push heroku BRANCH:refs/heads/master
+# The below commands are run
+# >heroku container:push web --app APP_NAME
+# >heroku container:release web --app APP_NAME
 ```
+
+# Usage
 
 In order to use the action in your workflow, just add in your _.github/workflows/YOURACTION.yml_
 
@@ -51,8 +63,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2 # IMPORTANT: use v2 and do not set any fetch-depth flags because the action will unshallow your repo automatically
-      - uses: akhileshns/heroku-deploy@v2.0.2 # This is the action
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.0.0 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -60,13 +72,20 @@ jobs:
           buildpack: "SOME BUILDPACK" #OPTIONAL
           branch: "YOUR_BRANCH" #OPTIONAL and DEFAULT - 'HEAD' (a.k.a your current branch)
           dontuseforce: false #OPTIONAL and DEFAULT - false
+          usedocker: false #OPTIONAL and DEFAULT - false
 ```
 
 You can if you want pass the heroku_app_name, heroku_email and buildpack through github secrets as well if you want, just make sure that atleast your heroku_api_key is passed via GitHub Secrets.
 
-# Important Notes
+# Using Docker
 
-- Make sure you are using **v2** of the **actions/checkout** action and do not add the **fetch-depth** flag which is available as an option to the actions/checkout@v2 action. (Note. This is because the action expects a shallow clone of the repo and older versions of the actions/checkout action makes complete clones instead. Additionally, keep in mind that the action will unshallow your repo's clone so that renders the fetch-depth option useless if you are using the v2 of the actions/checkout action)
+Heroku now allows users to deploy docker containers. To use this feature, simply add a Dockerfile to your project and add a `CMD` command at the end of the Dockerfile. This is the command used by heroku to start the webserver inside the container. Finally make sure to set the `usedocker` flag to true before deploying.
+
+P.S: Keep in mind that if you deploy once using docker, the same heroku app is not compatible with a non-docker setup and similarly, you cannot deploy a dockerized setup to a non-docker heroku app.
+
+Also thanks to [Olav Sundfør](https://github.com/olaven) for adding this feature
+
+# Important Notes
 
 - You can find the secrets tab in your project's settings
 
@@ -77,6 +96,8 @@ You can if you want pass the heroku_app_name, heroku_email and buildpack through
   (I would recommend making a separate dev branch and setting up the action to trigger upon pull request to the master branch)
 
 - By default, if you don't specify a branch in your action, it will default to the HEAD branch (or whichever branch the action is defined under). So you might be wondering what happens if you define the same action in a different branch under the same heroku app name (or which you try to deploy to the same appname from a different branch)? The answer is that the new branch overrides whatever your old branch was (even if the new branch is behind the old branch in terms of commits unless you set dontuseforce to true)
+
+- For more info on how Heroku enables deployment using Docker, check out [https://www.heroku.com/deploy-with-docker](https://www.heroku.com/deploy-with-docker)
 
 # License
 
