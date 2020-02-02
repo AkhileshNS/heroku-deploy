@@ -1,8 +1,8 @@
 const { execSync } = require("child_process");
 
 try {
-  const res = execSync("echo 'hello world'").toString();
-  console.log({ res });
+  const res = execSync("git rev-parse --is-shallow-repository").toString();
+  console.log({ isShallow: res === "true\n" });
 } catch (err) {
   console.log({ err });
 }
