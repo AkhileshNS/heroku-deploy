@@ -55,20 +55,23 @@ heroku.usedocker = core.getInput("usedocker");
 // Program logic
 try {
 
-	  if (!heroku.usedocker)
+	  if (!heroku.usedocker) {
 	      execSync("git fetch --prune --unshallow");
-
-	  execSync(createCatFile(heroku));
+	  }
+ 
+    execSync(createCatFile(heroku));
     console.log("Created and wrote to ~./netrc");
 
     execSync("heroku login");
-    if (heroku.usedocker)
+    if (heroku.usedocker) {
         execSync("heroku container:login"); 
+    }
 
     console.log("Successfully logged into heroku");
 
-    if (!heroku.usedocker)
+    if (!heroku.usedocker) {
         addRemote(); 
+    }
 
     try {
     
