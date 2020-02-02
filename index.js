@@ -43,10 +43,8 @@ heroku.email = core.getInput("heroku_email");
 heroku.app_name = core.getInput("heroku_app_name");
 heroku.buildpack = core.getInput("buildpack");
 heroku.branch = core.getInput("branch");
-heroku.dontuseforce = core.getInput("dontuseforce");
-heroku.usedocker = core.getInput("usedocker");
-
-console.log(heroku);
+heroku.dontuseforce = core.getInput("dontuseforce") === "true" ? true : false;
+heroku.usedocker = core.getInput("usedocker") === "true" ? true : false;
 
 // Program logic
 try {
