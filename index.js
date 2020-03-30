@@ -11,14 +11,20 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const deploy = ({ dontuseforce, app_name, branch, usedocker }) => {
+const deploy = ({ dontuseforce, app_name, branch, usedocker, appdir }) => {
   const force = !dontuseforce ? "--force" : "";
 
   if (usedocker) {
     execSync(`heroku container:push web --app ${app_name}`);
     execSync(`heroku container:release web --app ${app_name}`);
   } else {
-    execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
+    if (appdir == "") {
+      execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
+    } else {
+      execSync(
+        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:master`
+      );
+    }
   }
 };
 
@@ -45,6 +51,7 @@ heroku.buildpack = core.getInput("buildpack");
 heroku.branch = core.getInput("branch");
 heroku.dontuseforce = core.getInput("dontuseforce") === "true" ? true : false;
 heroku.usedocker = core.getInput("usedocker") === "true" ? true : false;
+heroku.appdir = core.getInput("appdir");
 
 // Program logic
 try {
