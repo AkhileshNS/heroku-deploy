@@ -18,7 +18,7 @@ const deploy = ({ dontuseforce, app_name, branch, usedocker, appdir }) => {
     execSync(`heroku container:push web --app ${app_name}`);
     execSync(`heroku container:release web --app ${app_name}`);
   } else {
-    if (appdir == "") {
+    if (appdir === "") {
       execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
     } else {
       execSync(
