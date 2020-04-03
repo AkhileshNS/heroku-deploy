@@ -76,6 +76,8 @@ jobs:
           appdir: "" #OPTIONAL and DEFAULT - "". This is useful if the api you're deploying is in a subfolder
 ```
 
+Note. Thanks to [meszarosdezso](https://github.com/meszarosdezso) for adding the appdir feature
+
 You can if you want pass the heroku_app_name, heroku_email and buildpack through github secrets as well if you want, just make sure that atleast your heroku_api_key is passed via GitHub Secrets.
 
 # Using Docker
