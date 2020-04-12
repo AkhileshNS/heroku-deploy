@@ -26,7 +26,7 @@ inputs:
     default: false
   docker_heroku_process_type:
     description: "Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled"
-    default: web
+    default: "web"
     required: false
   appdir:
     description: "Set if your app is located in a subdirectory."
