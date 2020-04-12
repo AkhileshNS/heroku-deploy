@@ -11,12 +11,12 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const deploy = ({ dontuseforce, app_name, branch, usedocker, appdir }) => {
+const deploy = ({ dontuseforce, app_name, branch, usedocker, dockerHerokuProcessType, appdir }) => {
   const force = !dontuseforce ? "--force" : "";
 
   if (usedocker) {
-    execSync(`heroku container:push web --app ${app_name}`);
-    execSync(`heroku container:release web --app ${app_name}`);
+    execSync(`heroku container:push ${dockerHerokuProcessType} --app ${app_name}`);
+    execSync(`heroku container:release ${dockerHerokuProcessType} --app ${app_name}`);
   } else {
     if (appdir === "") {
       execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
@@ -51,6 +51,7 @@ heroku.buildpack = core.getInput("buildpack");
 heroku.branch = core.getInput("branch");
 heroku.dontuseforce = core.getInput("dontuseforce") === "true" ? true : false;
 heroku.usedocker = core.getInput("usedocker") === "true" ? true : false;
+heroku.dockerHerokuProcessType = core.getInput("docker_heroku_process_type");
 heroku.appdir = core.getInput("appdir");
 
 // Program logic
