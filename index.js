@@ -51,8 +51,7 @@ heroku.buildpack = core.getInput("buildpack");
 heroku.branch = core.getInput("branch");
 heroku.dontuseforce = core.getInput("dontuseforce") === "true" ? true : false;
 heroku.usedocker = core.getInput("usedocker") === "true" ? true : false;
-const dockerHerokuProcessType = core.getInput("docker_heroku_process_type");
-heroku.dockerHerokuProcessType = dockerHerokuProcessType ? dockerHerokuProcessType : "web";
+heroku.dockerHerokuProcessType = core.getInput("docker_heroku_process_type");
 heroku.appdir = core.getInput("appdir");
 
 // Program logic
