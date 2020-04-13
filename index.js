@@ -22,7 +22,7 @@ const deploy = ({ dontuseforce, app_name, branch, usedocker, dockerHerokuProcess
       execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
     } else {
       execSync(
-        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:master`
+        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/master`
       );
     }
   }
