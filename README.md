@@ -74,9 +74,12 @@ jobs:
           dontuseforce: false #OPTIONAL and DEFAULT - false
           usedocker: false #OPTIONAL and DEFAULT - false
           appdir: "" #OPTIONAL and DEFAULT - "". This is useful if the api you're deploying is in a subfolder
+          docker_heroku_process_type: "" #OPTIONAL and DEFAULT - "web"
 ```
 
 Note. Thanks to [meszarosdezso](https://github.com/meszarosdezso) for adding the appdir feature
+
+Note. The **docker_heroku_process_type** is used to dictate the type of heroku process to use (Ex: web, worker) and it is only useful if **usedocker** is set to true. Thanks to [singleton11](https://github.com/singleton11) for adding this feature.
 
 You can if you want pass the heroku_app_name, heroku_email and buildpack through github secrets as well if you want, just make sure that atleast your heroku_api_key is passed via GitHub Secrets.
 
