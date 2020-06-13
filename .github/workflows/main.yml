@@ -49,7 +49,7 @@ jobs:
     needs: deploy-test-2
     steps:
       - uses: actions/checkout@v2
-      - run: npm run setup tests/test-3
+      - run: npm run setup tests/test-3/data.json
       - run: |
           git config --global user.email "nsakhilesh02@gmail.com"
           git config --global user.name "AkhileshNS"
