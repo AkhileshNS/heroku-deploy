@@ -11,12 +11,25 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const deploy = ({ dontuseforce, app_name, branch, usedocker, dockerHerokuProcessType, appdir }) => {
+const deploy = ({
+  dontuseforce,
+  app_name,
+  branch,
+  usedocker,
+  dockerHerokuProcessType,
+  appdir,
+}) => {
   const force = !dontuseforce ? "--force" : "";
 
   if (usedocker) {
-    execSync(`heroku container:push ${dockerHerokuProcessType} --app ${app_name}`);
-    execSync(`heroku container:release ${dockerHerokuProcessType} --app ${app_name}`);
+    execSync(
+      `heroku container:push ${dockerHerokuProcessType} --app ${app_name}`,
+      appdir ? { cwd: appdir } : null
+    );
+    execSync(
+      `heroku container:release ${dockerHerokuProcessType} --app ${app_name}`,
+      appdir ? { cwd: appdir } : null
+    );
   } else {
     if (appdir === "") {
       execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
