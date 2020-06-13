@@ -14,7 +14,6 @@ jobs:
       - run: |
           git config --global user.email "nsakhilesh02@gmail.com"
           git config --global user.name "AkhileshNS"
-          git pull
           git add -A
           git commit -m "Added Data.json"
       - uses: akhileshns/heroku-deploy@v3.0.4
@@ -33,7 +32,6 @@ jobs:
       - run: |
           git config --global user.email "nsakhilesh02@gmail.com"
           git config --global user.name "AkhileshNS"
-          git pull
           git add -A
           git commit -m "Added index.html"
       - uses: akhileshns/heroku-deploy@v3.0.4
