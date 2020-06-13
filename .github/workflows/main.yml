@@ -10,20 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: npm run setup tests/test-1/data.json && git add -A && git commit -m "Added Data.json"
       - uses: akhileshns/heroku-deploy@v3.0.4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "akhileshns-hd-test-1"
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-1"
+      - run: npm run test-action https://akhileshns-hd-test-1.herokuapp.com/
   deploy-test-2:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: npm run setup tests/test-1/data.json && git add -A && git commit -m "Added Data.json"
       - uses: akhileshns/heroku-deploy@v3.0.4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "akhileshns-hd-test-2"
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-2"
-          buildpack: "https://github.com/heroku/heroku-buildpack-python.git"
+          buildpack: "https://github.com/heroku/heroku-buildpack-static.git"
+      - run: npm run test-action https://akhileshns-hd-test-2.herokuapp.com/
