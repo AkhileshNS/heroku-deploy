@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  deploy-test-1:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,3 +16,14 @@ jobs:
           heroku_app_name: "akhileshns-hd-test-1"
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-1"
+  deploy-test-2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.0.4
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "akhileshns-hd-test-2"
+          heroku_email: "nsakhilesh02@gmail.com"
+          appdir: "tests/test-2"
+          buildpack: "https://github.com/jincod/dotnetcore-buildpack.git"
