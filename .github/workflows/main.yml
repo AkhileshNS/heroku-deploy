@@ -28,7 +28,7 @@ jobs:
     needs: deploy-test-1
     steps:
       - uses: actions/checkout@v2
-      - run: npm run setup tests/test-1/data.json
+      - run: npm run setup tests/test-2/data.json
       - run: |
           git config --global user.email "nsakhilesh02@gmail.com"
           git config --global user.name "AkhileshNS"
