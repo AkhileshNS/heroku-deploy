@@ -10,7 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm run setup tests/test-1/data.json && git add -A && git commit -m "Added Data.json"
+      - run: npm run setup tests/test-1/data.json
+      - run: |
+          git config --global user.email "nsakhilesh02@gmail.com"
+          git config --global user.name "AkhileshNS"
+          git add -A
+          git commit -m "Added Data.json"
       - uses: akhileshns/heroku-deploy@v3.0.4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -22,7 +27,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm run setup tests/test-1/data.json && git add -A && git commit -m "Added Data.json"
+      - run: npm run setup tests/test-1/data.json
+      - run: |
+          git config --global user.email "nsakhilesh02@gmail.com"
+          git config --global user.name "AkhileshNS"
+          git add -A
+          git commit -m "Added Data.json"
       - uses: akhileshns/heroku-deploy@v3.0.4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
