@@ -12,7 +12,13 @@ https
 
     // The whole response has been received. Print out the result.
     resp.on("end", () => {
-      const data = JSON.parse(rawData);
+      let data;
+      if (!rawData.includes("<body>")) {
+        data = JSON.parse(rawData);
+      } else {
+        data = JSON.parse(rawData.split("<body>")[1].split("</body>")[0]);
+      }
+
       if (
         data.GITHUB_RUN_ID === process.env.GITHUB_RUN_ID &&
         data.GITHUB_RUN_NUMBER === process.env.GITHUB_RUN_NUMBER &&

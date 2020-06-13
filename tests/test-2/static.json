@@ -1,6 +1,0 @@
-{
-  "root": ".",
-  "routes": {
-    "*": "data.json"
-  }
-}
