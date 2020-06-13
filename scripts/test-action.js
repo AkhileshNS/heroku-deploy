@@ -12,6 +12,7 @@ https
 
     // The whole response has been received. Print out the result.
     resp.on("end", () => {
+      console.log(rawData);
       let data;
       if (!rawData.includes("<body>")) {
         data = JSON.parse(rawData);
