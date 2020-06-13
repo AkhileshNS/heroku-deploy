@@ -26,4 +26,4 @@ jobs:
           heroku_app_name: "akhileshns-hd-test-2"
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-2"
-          buildpack: "https://github.com/jincod/dotnetcore-buildpack.git"
+          buildpack: "https://github.com/heroku/heroku-buildpack-python.git"
