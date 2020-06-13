@@ -16,7 +16,7 @@ jobs:
           git config --global user.name "AkhileshNS"
           git add -A
           git commit -m "Added Data.json"
-      - uses: akhileshns/heroku-deploy@v3.0.4
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "akhileshns-hd-test-1"
@@ -35,7 +35,7 @@ jobs:
           git config --global user.name "AkhileshNS"
           git add -A
           git commit -m "Added index.html"
-      - uses: akhileshns/heroku-deploy@v3.0.4
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "akhileshns-hd-test-2"
@@ -55,7 +55,7 @@ jobs:
           git config --global user.name "AkhileshNS"
           git add -A
           git commit -m "Added index.html"
-      - uses: akhileshns/heroku-deploy@v3.0.4
+      - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "akhileshns-hd-test-3"
