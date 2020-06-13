@@ -15,4 +15,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "akhileshns-hd-test-1"
           heroku_email: "nsakhilesh02@gmail.com"
-          appdir: "./tests/test-1"
+          appdir: "tests/test-1"
