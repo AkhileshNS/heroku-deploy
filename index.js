@@ -34,8 +34,15 @@ const deploy = ({
     if (appdir === "") {
       execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
     } else {
+      const Appdir =
+        appdir[0] === "." && appdir[1] === "/"
+          ? appdir.slice(2)
+          : appdir[0] === "/"
+          ? appdir.slice(1)
+          : appdir;
+
       execSync(
-        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/master`
+        `git push ${force} heroku \`git subtree split --prefix=${Appdir} ${branch}\`:refs/heads/master`
       );
     }
   }
