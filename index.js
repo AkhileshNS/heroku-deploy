@@ -90,7 +90,7 @@ try {
   }
 
   execSync(createCatFile(heroku));
-  console.log("Created and wrote to ~./netrc");
+  console.log("Created and wrote to ~/.netrc");
 
   execSync("heroku login");
   if (heroku.usedocker) {
