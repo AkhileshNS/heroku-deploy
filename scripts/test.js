@@ -1,3 +1,6 @@
-for (let key in process.env) {
-  console.log(key + "=" + process.env[key]);
-}
+const p = require("phin");
+
+(async () => {
+  const res = await p("https://akhileshns-hd-test-1.herokuapp.com/");
+  console.log(res.body.toString());
+})();

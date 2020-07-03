@@ -132,7 +132,7 @@ let heroku = {
     if (heroku.healthcheck) {
       try {
         const res = await p(heroku.healthcheck);
-        console.log(res.body);
+        console.log(res.body.toString());
       } catch (err) {
         console.log(err.message);
         core.setFailed(
