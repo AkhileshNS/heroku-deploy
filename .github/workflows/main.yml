@@ -2,8 +2,7 @@ name: Tests
 
 on:
   push:
-    tags:
-      - test-*
+    branches: [master]
 
 jobs:
   deploy-test-1:
