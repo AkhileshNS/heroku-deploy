@@ -11,7 +11,7 @@ def hello_handler():
 
 @app.route('/env')
 def env_handler():
-    return environ["HD_CHECK"]
+    return environ["CHECK"]
 
 # $env:FLASK_APP="index.py";flask run
 # export FLASK_APP=index.py && flask run
