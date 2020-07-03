@@ -88,8 +88,6 @@ heroku.appdir = core.getInput("appdir");
 
 // Program logic
 try {
-  execSync("git pull");
-
   // Check if using Docker
   if (!heroku.usedocker) {
     // Check if Repo clone is shallow

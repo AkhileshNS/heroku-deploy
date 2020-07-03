@@ -10,7 +10,7 @@ def hello_handler():
     return f.read()
 
 @app.route('/env')
-def hello_handler():
+def env_handler():
     return environ["HEROKU_CHECK"]
 
 # $env:FLASK_APP="index.py";flask run
