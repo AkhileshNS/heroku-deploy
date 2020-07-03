@@ -52,14 +52,14 @@ const deploy = ({
 const addRemote = ({ app_name, buildpack }) => {
   try {
     execSync("heroku git:remote --app " + app_name);
-    console.log("Added git remote heroku");
+    core.debug("Added git remote heroku");
   } catch (err) {
     execSync(
       "heroku create " +
         app_name +
         (buildpack ? " --buildpack " + buildpack : "")
     );
-    console.log("Successfully created a new heroku app");
+    core.debug("Successfully created a new heroku app");
   }
 };
 
@@ -106,13 +106,13 @@ let heroku = {
     }
 
     execSync(createCatFile(heroku));
-    console.log("Created and wrote to ~/.netrc");
+    core.debug("Created and wrote to ~/.netrc");
 
     execSync("heroku login");
     if (heroku.usedocker) {
       execSync("heroku container:login");
     }
-    console.log("Successfully logged into heroku");
+    core.debug("Successfully logged into heroku");
 
     addRemote(heroku);
     addConfig(heroku);
@@ -130,8 +130,10 @@ let heroku = {
     }
 
     if (heroku.healthcheck) {
-      const res = await p(heroku.healthcheck);
-      if (!res.ok) {
+      try {
+        await p(heroku.healthcheck);
+      } catch (err) {
+        core.debug(err.message);
         core.setFailed(
           "Error deploying Server. Please check your logs on Heroku to try and diagnose the problem"
         );
