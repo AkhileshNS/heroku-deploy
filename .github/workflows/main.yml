@@ -2,8 +2,7 @@ name: Tests
 
 on:
   push:
-    tags:
-      - test-*
+    branches: [master]
 
 jobs:
   deploy-test-1:
@@ -22,6 +21,8 @@ jobs:
           heroku_app_name: "akhileshns-hd-test-1"
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-1"
+        env:
+          HEROKU_CHECK: "true"
       - run: npm run test-action https://akhileshns-hd-test-1.herokuapp.com/
 
   deploy-test-2:

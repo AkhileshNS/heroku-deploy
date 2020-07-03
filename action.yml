@@ -15,15 +15,19 @@ inputs:
     required: true
   buildpack:
     description: "An optional buildpack to use when creating the heroku application"
+    required: false
   branch:
     description: "The branch that you would like to deploy to Heroku"
     default: "HEAD"
+    required: false
   dontuseforce:
     description: "Set this to true if you don't want to use --force when switching branches"
-    default: false
+    default: "false"
+    required: false
   usedocker:
     description: "Will deploy using Dockerfile in project root."
-    default: false
+    default: "false"
+    required: false
   docker_heroku_process_type:
     description: "Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled"
     default: "web"
@@ -31,6 +35,7 @@ inputs:
   appdir:
     description: "Set if your app is located in a subdirectory."
     default: ""
+    required: false
 outputs:
   status:
     description: "The Success/Failure of the action"

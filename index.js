@@ -62,6 +62,18 @@ const addRemote = ({ app_name, buildpack }) => {
   }
 };
 
+const addConfig = ({ app_name }) => {
+  const configVars = [];
+  for (let key in process.env) {
+    if (key.startsWith("HEROKU_")) {
+      configVars.push(key + "=" + process.env[key]);
+    }
+  }
+  if (configVars.length !== 0) {
+    execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
+  }
+};
+
 // Input Variables
 let heroku = {};
 heroku.api_key = core.getInput("heroku_api_key");
@@ -99,6 +111,7 @@ try {
   console.log("Successfully logged into heroku");
 
   addRemote(heroku);
+  addConfig(heroku);
 
   try {
     deploy({ ...heroku, dontuseforce: true });
