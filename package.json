@@ -25,6 +25,7 @@
   "homepage": "https://github.com/AkhileshNS/heroku-deploy#readme",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.0"
+    "@actions/core": "^1.2.0",
+    "phin": "^3.5.0"
   }
 }

@@ -1,3 +1,4 @@
+const p = require("phin");
 const core = require("@actions/core");
 const { execSync } = require("child_process");
 
@@ -129,7 +130,7 @@ let heroku = {
     }
 
     if (heroku.healthcheck) {
-      const res = await fetch(heroku.healthcheck);
+      const res = await p(heroku.healthcheck);
       if (!res.ok) {
         core.setFailed(
           "Error deploying Server. Please check your logs on Heroku to try and diagnose the problem"
