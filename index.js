@@ -65,7 +65,7 @@ const addRemote = ({ app_name, buildpack }) => {
 const addConfig = ({ app_name }) => {
   const configVars = [];
   for (let key in process.env) {
-    if (key.startsWith("HEROKU_")) {
+    if (key.startsWith("HD_")) {
       configVars.push(key + "=" + process.env[key]);
     }
   }
