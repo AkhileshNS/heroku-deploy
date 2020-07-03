@@ -15,8 +15,9 @@ This is a very simple GitHub action that allows you to deploy to Heroku. The act
    - [Deploy Subdirectory](#deploy-subdirectory)
    - [Deploy Custom Branch](#deploy-custom-branch)
 4. [HealthCheck](#healthcheck)
-5. [Important Notes](#important-notes)
-6. [License](#license)
+5. [Environment Variables](#environment-variables)
+6. [Important Notes](#important-notes)
+7. [License](#license)
 
 ## Getting Started
 
@@ -221,6 +222,41 @@ jobs:
 Adding the url to the healthcheck option of the action will make the action attempt to perform a GET Request to that url and print the response if successful. Else it will fail the action to indicate that the deploy was not successful.
 
 P.S: It is recommended that you setup a specific route such as **/health** for performing healthchecks
+
+## Environment Variables
+
+Heroku offers a means of passing sensitive information to your app (such as api keys etc) via something it calls **config vars** which you can find in the settings of your heroku app. But sometimes you might want to store sensitive information (api keys etc) in GitHub Secrets instead just to ensure platform independence. If you choose to this, you can then pass those secrets to your heroku app by using the "env" object of the action:-
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master # Changing the branch here would also work
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.1.6 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
+          heroku_email: "YOUR EMAIL"
+        env:
+          HD_FIREBASE_API_KEY: ${{secrets.FIREBASE_API_KEY}}
+          HD_RANDOM_DATA: "Hello"
+```
+
+Note that the variables must start with "**HD_**". This is is important so the action can tell your environment variable apart from multiple other variables (passed by your language, github actions etc) which you probably don't want sitting in your heroku app's config vars.
+
+On that note, if you've set these variables and have deployed your app, you can check your Heroku App's config vars and you'll find that they have been set with the env variables you have passed.
+
+**PLEASE NOTE**: The "**HD_**" will be scrapped from the variable your name by the action. So in your project, "**FIREBASE_API_KEY**" will be passed instead of "**HD_FIREBASE_API_KEY**" (for example) and you can see this if you check your Heroku App's config vars. We understand that this can be confusing but this is again to ensure Platform independence and so that you don't have to use HD_FIREBASE_API_KEY if you choose to stop using Heroku
 
 # Important Notes
 

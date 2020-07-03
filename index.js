@@ -67,7 +67,7 @@ const addConfig = ({ app_name }) => {
   const configVars = [];
   for (let key in process.env) {
     if (key.startsWith("HD_")) {
-      configVars.push(key + "=" + process.env[key]);
+      configVars.push(key.substring(3) + "=" + process.env[key]);
     }
   }
   if (configVars.length !== 0) {
