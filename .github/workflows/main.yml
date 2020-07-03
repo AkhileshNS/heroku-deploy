@@ -21,6 +21,7 @@ jobs:
           heroku_app_name: "akhileshns-hd-test-1"
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-1"
+          healthcheck: "https://akhileshns-hd-test-1.herokuapp.com/"
         env:
           HD_CHECK: "true"
       - run: npm run test-action https://akhileshns-hd-test-1.herokuapp.com/
@@ -43,6 +44,7 @@ jobs:
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-2"
           buildpack: "https://github.com/heroku/heroku-buildpack-static.git"
+          healthcheck: "https://akhileshns-hd-test-2.herokuapp.com/"
       - run: npm run test-action https://akhileshns-hd-test-2.herokuapp.com/
 
   deploy-test-3:
@@ -63,4 +65,5 @@ jobs:
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-3"
           usedocker: true
+          healthcheck: "https://akhileshns-hd-test-3.herokuapp.com/"
       - run: npm run test-action https://akhileshns-hd-test-3.herokuapp.com/

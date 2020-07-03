@@ -75,60 +75,73 @@ const addConfig = ({ app_name }) => {
 };
 
 // Input Variables
-let heroku = {};
-heroku.api_key = core.getInput("heroku_api_key");
-heroku.email = core.getInput("heroku_email");
-heroku.app_name = core.getInput("heroku_app_name");
-heroku.buildpack = core.getInput("buildpack");
-heroku.branch = core.getInput("branch");
-heroku.dontuseforce = core.getInput("dontuseforce") === "true" ? true : false;
-heroku.usedocker = core.getInput("usedocker") === "true" ? true : false;
-heroku.dockerHerokuProcessType = core.getInput("docker_heroku_process_type");
-heroku.appdir = core.getInput("appdir");
+let heroku = {
+  api_key: core.getInput("heroku_api_key"),
+  email: core.getInput("heroku_email"),
+  app_name: core.getInput("heroku_app_name"),
+  buildpack: core.getInput("buildpack"),
+  branch: core.getInput("branch"),
+  dontuseforce: core.getInput("dontuseforce") === "true" ? true : false,
+  usedocker: core.getInput("usedocker") === "true" ? true : false,
+  dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
+  appdir: core.getInput("appdir"),
+  healthcheck: core.getInput("healthcheck"),
+};
 
-// Program logic
-try {
-  // Check if using Docker
-  if (!heroku.usedocker) {
-    // Check if Repo clone is shallow
-    const isShallow = execSync(
-      "git rev-parse --is-shallow-repository"
-    ).toString();
-
-    // If the Repo clone is shallow, make it unshallow
-    if (isShallow === "true\n") {
-      execSync("git fetch --prune --unshallow");
-    }
-  }
-
-  execSync(createCatFile(heroku));
-  console.log("Created and wrote to ~/.netrc");
-
-  execSync("heroku login");
-  if (heroku.usedocker) {
-    execSync("heroku container:login");
-  }
-  console.log("Successfully logged into heroku");
-
-  addRemote(heroku);
-  addConfig(heroku);
-
+(async () => {
+  // Program logic
   try {
-    deploy({ ...heroku, dontuseforce: true });
-  } catch (err) {
-    console.error(`
+    // Check if using Docker
+    if (!heroku.usedocker) {
+      // Check if Repo clone is shallow
+      const isShallow = execSync(
+        "git rev-parse --is-shallow-repository"
+      ).toString();
+
+      // If the Repo clone is shallow, make it unshallow
+      if (isShallow === "true\n") {
+        execSync("git fetch --prune --unshallow");
+      }
+    }
+
+    execSync(createCatFile(heroku));
+    console.log("Created and wrote to ~/.netrc");
+
+    execSync("heroku login");
+    if (heroku.usedocker) {
+      execSync("heroku container:login");
+    }
+    console.log("Successfully logged into heroku");
+
+    addRemote(heroku);
+    addConfig(heroku);
+
+    try {
+      deploy({ ...heroku, dontuseforce: true });
+    } catch (err) {
+      console.error(`
             Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. 
             (If you want to avoid this, set dontuseforce to 1 in with: of .github/workflows/action.yml. 
             Specifically, the error was: ${err}
         `);
 
-    deploy(heroku);
-  }
+      deploy(heroku);
+    }
 
-  core.setOutput(
-    "status",
-    "Successfully deployed heroku app from branch " + heroku.branch
-  );
-} catch (err) {
-  core.setFailed(err.toString());
-}
+    if (heroku.healthcheck) {
+      const res = await fetch(heroku.healthcheck);
+      if (!res.ok) {
+        core.setFailed(
+          "Error deploying Server. Please check your logs on Heroku to try and diagnose the problem"
+        );
+      }
+    }
+
+    core.setOutput(
+      "status",
+      "Successfully deployed heroku app from branch " + heroku.branch
+    );
+  } catch (err) {
+    core.setFailed(err.toString());
+  }
+})();
