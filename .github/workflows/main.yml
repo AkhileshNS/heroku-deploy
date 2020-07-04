@@ -67,3 +67,25 @@ jobs:
           usedocker: true
           healthcheck: "https://akhileshns-hd-test-3.herokuapp.com/"
       - run: npm run test-action https://akhileshns-hd-test-3.herokuapp.com/
+
+  deploy-test-4:
+    runs-on: ubuntu-latest
+    needs: deploy-test-3
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm run setup tests/test-4/data.json
+      - run: |
+          git config --global user.email "nsakhilesh02@gmail.com"
+          git config --global user.name "AkhileshNS"
+          git add -A
+          git commit -m "Added index.html"
+      - uses: akhileshns/heroku-deploy@master
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "akhileshns-hd-test-4"
+          heroku_email: "nsakhilesh02@gmail.com"
+          appdir: "tests/test-4"
+          usedocker: true
+          healthcheck: "https://akhileshns-hd-test-4.herokuapp.com/"
+          procfile: "web: gunicorn index:app"
+      - run: npm run test-action https://akhileshns-hd-test-4.herokuapp.com/

@@ -12,6 +12,39 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
+const addRemote = ({ app_name, buildpack }) => {
+  try {
+    execSync("heroku git:remote --app " + app_name);
+    console.log("Added git remote heroku");
+  } catch (err) {
+    execSync(
+      "heroku create " +
+        app_name +
+        (buildpack ? " --buildpack " + buildpack : "")
+    );
+    console.log("Successfully created a new heroku app");
+  }
+};
+
+const addConfig = ({ app_name }) => {
+  const configVars = [];
+  for (let key in process.env) {
+    if (key.startsWith("HD_")) {
+      configVars.push(key.substring(3) + "=" + process.env[key]);
+    }
+  }
+  if (configVars.length !== 0) {
+    execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
+  }
+};
+
+const createProcfile = ({ procfile }) => {
+  if (procfile) {
+    execSync(`echo "${procfile}" > Procfile`);
+    console.log("Written Procfile with custom configuration");
+  }
+};
+
 const deploy = ({
   dontuseforce,
   app_name,
@@ -49,32 +82,6 @@ const deploy = ({
   }
 };
 
-const addRemote = ({ app_name, buildpack }) => {
-  try {
-    execSync("heroku git:remote --app " + app_name);
-    console.log("Added git remote heroku");
-  } catch (err) {
-    execSync(
-      "heroku create " +
-        app_name +
-        (buildpack ? " --buildpack " + buildpack : "")
-    );
-    console.log("Successfully created a new heroku app");
-  }
-};
-
-const addConfig = ({ app_name }) => {
-  const configVars = [];
-  for (let key in process.env) {
-    if (key.startsWith("HD_")) {
-      configVars.push(key.substring(3) + "=" + process.env[key]);
-    }
-  }
-  if (configVars.length !== 0) {
-    execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
-  }
-};
-
 // Input Variables
 let heroku = {
   api_key: core.getInput("heroku_api_key"),
@@ -87,6 +94,7 @@ let heroku = {
   dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
   appdir: core.getInput("appdir"),
   healthcheck: core.getInput("healthcheck"),
+  procfile: core.getInput("procfile"),
 };
 
 (async () => {
@@ -116,6 +124,7 @@ let heroku = {
 
     addRemote(heroku);
     addConfig(heroku);
+    createProcfile(heroku);
 
     try {
       deploy({ ...heroku, dontuseforce: true });
