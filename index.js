@@ -40,7 +40,7 @@ const addConfig = ({ app_name }) => {
 
 const createProcfile = ({ procfile }) => {
   if (procfile) {
-    execSync(`echo "${procfile}" > Procfile`);
+    execSync(`printf "${procfile}" > Procfile`);
     console.log("Written Procfile with custom configuration");
   }
 };
@@ -116,6 +116,8 @@ let heroku = {
     execSync(createCatFile(heroku));
     console.log("Created and wrote to ~/.netrc");
 
+    createProcfile(heroku);
+
     execSync("heroku login");
     if (heroku.usedocker) {
       execSync("heroku container:login");
@@ -124,7 +126,6 @@ let heroku = {
 
     addRemote(heroku);
     addConfig(heroku);
-    createProcfile(heroku);
 
     try {
       deploy({ ...heroku, dontuseforce: true });
