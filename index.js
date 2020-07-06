@@ -43,8 +43,7 @@ const addConfig = ({ app_name }) => {
 const createProcfile = ({ procfile, appdir }) => {
   if (procfile) {
     fs.writeFileSync(path.join(appdir, "Procfile"), procfile);
-    const logs = execSync("cd ./" + appdir + " && ls -la");
-    console.log(logs);
+    execSync(`git add -A && git commit -m "Added Procfile"`);
     console.log("Written Procfile with custom configuration");
   }
 };

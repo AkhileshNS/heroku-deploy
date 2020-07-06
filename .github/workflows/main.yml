@@ -7,7 +7,6 @@ on:
 jobs:
   deploy-test-1:
     runs-on: ubuntu-latest
-    needs: deploy-test-4
     steps:
       - uses: actions/checkout@v2
       - run: npm run setup tests/test-1/data.json
@@ -71,6 +70,7 @@ jobs:
 
   deploy-test-4:
     runs-on: ubuntu-latest
+    needs: deploy-test-3
     steps:
       - uses: actions/checkout@v2
       - run: npm run setup tests/test-4/data.json
