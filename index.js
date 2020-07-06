@@ -43,7 +43,8 @@ const addConfig = ({ app_name }) => {
 const createProcfile = ({ procfile, appdir }) => {
   if (procfile) {
     fs.writeFileSync(path.join(appdir, "Procfile"), procfile);
-    execSync("cd ./" + appdir + " && ls -la");
+    const logs = execSync("cd ./" + appdir + " && ls -la");
+    console.log(logs);
     console.log("Written Procfile with custom configuration");
   }
 };
