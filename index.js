@@ -1,6 +1,8 @@
 const p = require("phin");
 const core = require("@actions/core");
 const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 // Support Functions
 const createCatFile = ({ email, api_key }) => `cat >~/.netrc <<EOF
@@ -40,7 +42,7 @@ const addConfig = ({ app_name }) => {
 
 const createProcfile = ({ procfile, appdir }) => {
   if (procfile) {
-    execSync(`printf "${procfile}" > ./${appdir}/Procfile`);
+    fs.writeFileSync(path.join(appdir, "Procfile"), procfile);
     console.log("Written Procfile with custom configuration");
   }
 };

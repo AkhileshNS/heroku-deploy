@@ -14,7 +14,7 @@ jobs:
           git config --global user.email "nsakhilesh02@gmail.com"
           git config --global user.name "AkhileshNS"
           git add -A
-          git commit -m "Added Data.json"
+          git commit -m "Added data.json"
       - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -57,7 +57,7 @@ jobs:
           git config --global user.email "nsakhilesh02@gmail.com"
           git config --global user.name "AkhileshNS"
           git add -A
-          git commit -m "Added index.html"
+          git commit -m "Added data.json"
       - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -78,7 +78,7 @@ jobs:
           git config --global user.email "nsakhilesh02@gmail.com"
           git config --global user.name "AkhileshNS"
           git add -A
-          git commit -m "Added index.html"
+          git commit -m "Added data.json"
       - uses: akhileshns/heroku-deploy@master
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
