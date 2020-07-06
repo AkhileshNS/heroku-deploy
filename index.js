@@ -69,7 +69,7 @@ const deploy = ({
       execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
     } else {
       execSync(
-        `git push ${force} heroku \`git subtree split --prefix=${Appdir} ${branch}\`:refs/heads/master`
+        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/master`
       );
     }
   }
@@ -91,12 +91,14 @@ let heroku = {
 };
 
 // Formatting
-heroku.appdir =
-  heroku.appdir[0] === "." && heroku.appdir[1] === "/"
-    ? heroku.appdir.slice(2)
-    : heroku.appdir[0] === "/"
-    ? heroku.appdir.slice(1)
-    : heroku.appdir;
+if (heroku.appdir) {
+  heroku.appdir =
+    heroku.appdir[0] === "." && heroku.appdir[1] === "/"
+      ? heroku.appdir.slice(2)
+      : heroku.appdir[0] === "/"
+      ? heroku.appdir.slice(1)
+      : heroku.appdir;
+}
 
 (async () => {
   // Program logic
