@@ -38,9 +38,9 @@ const addConfig = ({ app_name }) => {
   }
 };
 
-const createProcfile = ({ procfile }) => {
+const createProcfile = ({ procfile, appdir }) => {
   if (procfile) {
-    execSync(`printf "${procfile}" > Procfile`);
+    execSync(`printf "${procfile}" > ./${appdir}/Procfile`);
     console.log("Written Procfile with custom configuration");
   }
 };
@@ -68,13 +68,6 @@ const deploy = ({
     if (appdir === "") {
       execSync(`git push heroku ${branch}:refs/heads/master ${force}`);
     } else {
-      const Appdir =
-        appdir[0] === "." && appdir[1] === "/"
-          ? appdir.slice(2)
-          : appdir[0] === "/"
-          ? appdir.slice(1)
-          : appdir;
-
       execSync(
         `git push ${force} heroku \`git subtree split --prefix=${Appdir} ${branch}\`:refs/heads/master`
       );
@@ -96,6 +89,14 @@ let heroku = {
   healthcheck: core.getInput("healthcheck"),
   procfile: core.getInput("procfile"),
 };
+
+// Formatting
+heroku.appdir =
+  heroku.appdir[0] === "." && heroku.appdir[1] === "/"
+    ? heroku.appdir.slice(2)
+    : heroku.appdir[0] === "/"
+    ? heroku.appdir.slice(1)
+    : heroku.appdir;
 
 (async () => {
   // Program logic
