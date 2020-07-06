@@ -87,4 +87,5 @@ jobs:
           appdir: "tests/test-4"
           healthcheck: "https://akhileshns-hd-test-4.herokuapp.com/"
           procfile: "web: gunicorn index:app"
+      - run: sudo apt -y install tree && tree -d $GITHUB_WORKSPACE
       - run: npm run test-action https://akhileshns-hd-test-4.herokuapp.com/
