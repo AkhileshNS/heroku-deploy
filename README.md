@@ -225,6 +225,36 @@ Adding the url to the healthcheck option of the action will make the action atte
 
 P.S: It is recommended that you setup a specific route such as **/health** for performing healthchecks
 
+### Advanced Usage
+
+Additionally, if you are using a custom route for performing healthchecks, you can check for a specific value from this url using the **checkString** option of the action like so:
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master # Changing the branch here would also work
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.1.6 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
+          heroku_email: "YOUR EMAIL"
+          healthcheck: "https://[YOUR APP's NAME].herokuapp.com/health"
+          checkString: "ok"
+```
+
+This will essentially check if the value returned by sending a GET request to the **healthcheck** url is equal to the **checkString**
+
 ## Environment Variables
 
 Heroku offers a means of passing sensitive information to your app (such as api keys etc) via something it calls **config vars** which you can find in the settings of your heroku app. But sometimes you might want to store sensitive information (api keys etc) in GitHub Secrets instead just to ensure platform independence. If you choose to this, you can then pass those secrets to your heroku app by using the "env" object of the action:-
@@ -264,6 +294,8 @@ On that note, if you've set these variables and have deployed your app, you can 
 
 In some cases, you might want to be able to set the Procfile within the action itself instead of declaring it manually in your project. Although this approach is not recommended in favor of just using multiple branches, it might still be useful in some edge cases. You can set the Procfile in the action by using the **procfile** option of the action like so:
 
+_.github/workflows/main.yml_
+
 ```yaml
 name: Deploy
 
@@ -288,6 +320,8 @@ jobs:
 Keep in mind this won't work if you are using Docker.
 
 ## Important Notes
+
+- You can check this repo's [_.github/workflows/main.yml_](https://github.com/AkhileshNS/heroku-deploy/blob/master/.github/workflows/main.yml) for example use cases of the action in use. Additionally the APIs for these use cases can be found in the [_tests_](https://github.com/AkhileshNS/heroku-deploy/tree/master/tests) folder of the repo
 
 - You can find the secrets tab in your project's settings
 

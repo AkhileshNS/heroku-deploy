@@ -40,6 +40,10 @@ inputs:
     description: "A URL to which a healthcheck is performed (checks for 200 request)"
     required: false
     default: ""
+  checkString:
+    description: "Value to check for when conducting healthcheck request"
+    required: false
+    default: ""
   procfile:
     description: "Contents of the Procfile to save and deploy"
     required: false
