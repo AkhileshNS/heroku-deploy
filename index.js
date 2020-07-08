@@ -89,7 +89,7 @@ let heroku = {
   dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
   appdir: core.getInput("appdir"),
   healthcheck: core.getInput("healthcheck"),
-  checkString: core.getInput("checkString"),
+  checkstring: core.getInput("checkstring"),
   procfile: core.getInput("procfile"),
 };
 
@@ -148,7 +148,7 @@ if (heroku.appdir) {
     if (heroku.healthcheck) {
       try {
         const res = await p(heroku.healthcheck);
-        if (heroku.checkString && heroku.checkString !== res.body.toString()) {
+        if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
           core.setFailed(
             "Health Check Failed. Error deploying Server. Please check your logs on Heroku to try and diagnose the problem"
           );

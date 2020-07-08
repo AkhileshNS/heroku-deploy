@@ -72,6 +72,7 @@ The action comes with additional options that you can use to configure your proj
 | docker_heroku_process_type | false    | Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled. Defaults to "web" (Thanks to [singleton11](https://github.com/singleton11) for adding this feature) | web, worker                                           |
 | appdir                     | false    | Set if your app is located in a subdirectory                                                                                                                                                        | api, apis/python                                      |
 | healthcheck                | false    | A URL to which a healthcheck is performed (checks for 200 request)                                                                                                                                  | https://demo-rest-api.herokuapp.com                   |
+| checkstring                | false    | Value to check for when conducting healthcheck requests                                                                                                                                             | ok                                                    |
 | procfile                   | false    | Contents of the Procfile to save and deploy                                                                                                                                                         | web: npm start                                        |
 
 ## Examples
@@ -229,7 +230,7 @@ P.S: It is recommended that you setup a specific route such as **/health** for p
 
 ### Advanced Usage
 
-Additionally, if you are using a custom route for performing healthchecks, you can check for a specific value from this url using the **checkString** option of the action like so:
+Additionally, if you are using a custom route for performing healthchecks, you can check for a specific value from this url using the **checkstring** option of the action like so:
 
 _.github/workflows/main.yml_
 
@@ -252,10 +253,10 @@ jobs:
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
           heroku_email: "YOUR EMAIL"
           healthcheck: "https://[YOUR APP's NAME].herokuapp.com/health"
-          checkString: "ok"
+          checkstring: "ok"
 ```
 
-This will essentially check if the value returned by sending a GET request to the **healthcheck** url is equal to the **checkString**
+This will essentially check if the value returned by sending a GET request to the **healthcheck** url is equal to the **checkstring**
 
 ## Environment Variables
 
