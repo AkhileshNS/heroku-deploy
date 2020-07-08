@@ -3,6 +3,8 @@
 ![GitHub issues](https://img.shields.io/github/issues/AkhileshNS/heroku-deploy.svg)
 ![GitHub](https://img.shields.io/github/license/AkhileshNS/heroku-deploy.svg)
 
+![Tests](https://github.com/AkhileshNS/heroku-deploy/workflows/Tests/badge.svg)
+
 This is a very simple GitHub action that allows you to deploy to Heroku. The action works by running the following commands in shell via NodeJS:-
 
 ## Table of Contents

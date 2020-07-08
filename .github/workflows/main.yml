@@ -85,7 +85,7 @@ jobs:
           heroku_app_name: "akhileshns-hd-test-4"
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-4"
-          healthcheck: "https://akhileshns-hd-test-4.herokuapp.com/"
+          healthcheck: "https://akhileshns-hd-test-4.herokuapp.com/health"
           checkString: "ok"
           procfile: "web: gunicorn index:app"
       - run: npm run test-action https://akhileshns-hd-test-4.herokuapp.com/
