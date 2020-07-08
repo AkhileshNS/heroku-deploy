@@ -14,7 +14,7 @@ This is a very simple GitHub action that allows you to deploy to Heroku. The act
    - [Deploy with custom Buildpacks](#deploy-with-custom-buildpacks)
    - [Deploy Subdirectory](#deploy-subdirectory)
    - [Deploy Custom Branch](#deploy-custom-branch)
-4. [HealthCheck](#healthcheck)
+4. [Health Check](#health-check)
 5. [Environment Variables](#environment-variables)
 6. [Important Notes](#important-notes)
 7. [License](#license)
