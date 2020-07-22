@@ -44,6 +44,10 @@ inputs:
     description: "Value to check for when conducting healthcheck request"
     required: false
     default: ""
+  delay:
+    description: "Time (in seconds) to wait before performing healthcheck"
+    required: false
+    default: "0"
   procfile:
     description: "Contents of the Procfile to save and deploy"
     required: false

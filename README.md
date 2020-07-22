@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -73,6 +73,7 @@ The action comes with additional options that you can use to configure your proj
 | appdir                     | false    | Set if your app is located in a subdirectory                                                                                                                                                        | api, apis/python                                      |
 | healthcheck                | false    | A URL to which a healthcheck is performed (checks for 200 request)                                                                                                                                  | https://demo-rest-api.herokuapp.com                   |
 | checkstring                | false    | Value to check for when conducting healthcheck requests                                                                                                                                             | ok                                                    |
+| delay                      | false    | Time (in seconds) to wait before performing healthcheck. Defaults to 0 seconds                                                                                                                      | 5                                                     |
 | procfile                   | false    | Contents of the Procfile to save and deploy                                                                                                                                                         | web: npm start                                        |
 
 ## Examples
@@ -96,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -131,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -158,7 +159,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -187,7 +188,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -216,7 +217,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -247,7 +248,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -257,6 +258,37 @@ jobs:
 ```
 
 This will essentially check if the value returned by sending a GET request to the **healthcheck** url is equal to the **checkstring**
+
+### Adding Delay
+
+In some cases, a healthcheck ends up being performed before the application has been setup on Heroku. To counter this, you can manually set the **delay** option in the action to make the action wait a certain period of time (in seconds) before performing the healthcheck
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master # Changing the branch here would also work
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
+          heroku_email: "YOUR EMAIL"
+          healthcheck: "https://[YOUR APP's NAME].herokuapp.com/health"
+          checkstring: "ok"
+          delay: 5
+```
+
+By default, the delay will be 0 if you choose to not set it
 
 ## Environment Variables
 
@@ -277,7 +309,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -312,7 +344,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.2.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku

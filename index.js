@@ -5,6 +5,8 @@ const fs = require("fs");
 const path = require("path");
 
 // Support Functions
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const createCatFile = ({ email, api_key }) => `cat >~/.netrc <<EOF
 machine api.heroku.com
     login ${email}
@@ -90,6 +92,7 @@ let heroku = {
   appdir: core.getInput("appdir"),
   healthcheck: core.getInput("healthcheck"),
   checkstring: core.getInput("checkstring"),
+  delay: parseInt(core.getInput("delay")),
   procfile: core.getInput("procfile"),
 };
 
@@ -146,6 +149,10 @@ if (heroku.appdir) {
     }
 
     if (heroku.healthcheck) {
+      if (typeof heroku.delay === "number" && heroku.delay !== NaN) {
+        await sleep(heroku.delay * 1000);
+      }
+
       try {
         const res = await p(heroku.healthcheck);
         if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
