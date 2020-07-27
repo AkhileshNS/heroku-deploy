@@ -32,6 +32,9 @@ inputs:
     description: "Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled"
     default: "web"
     required: false
+  docker_build_args:
+    description: "A list of args to pass into the Docker build. This option only makes sense when usedocker enabled"
+    required: false
   appdir:
     description: "Set if your app is located in a subdirectory."
     default: ""

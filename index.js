@@ -56,12 +56,13 @@ const deploy = ({
   branch,
   usedocker,
   dockerHerokuProcessType,
+  dockerBuildArgs,
   appdir,
 }) => {
   const force = !dontuseforce ? "--force" : "";
   if (usedocker) {
     execSync(
-      `heroku container:push ${dockerHerokuProcessType} --app ${app_name}`,
+      `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
       appdir ? { cwd: appdir } : null
     );
     execSync(
@@ -89,6 +90,7 @@ let heroku = {
   dontuseforce: core.getInput("dontuseforce") === "true" ? true : false,
   usedocker: core.getInput("usedocker") === "true" ? true : false,
   dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
+  dockerBuildArgs: core.getInput("docker_build_args"),
   appdir: core.getInput("appdir"),
   healthcheck: core.getInput("healthcheck"),
   checkstring: core.getInput("checkstring"),
@@ -104,6 +106,16 @@ if (heroku.appdir) {
       : heroku.appdir[0] === "/"
       ? heroku.appdir.slice(1)
       : heroku.appdir;
+}
+
+// Collate docker build args into arg list
+if (heroku.dockerBuildArgs) {
+  heroku.dockerBuildArgs = heroku.dockerBuildArgs.split('\n')
+    .map(arg => `${arg}=${process.env[arg]}`)
+    .join(',');
+  heroku.dockerBuildArgs = heroku.dockerBuildArgs ?
+    `--arg ${heroku.dockerBuildArgs}` :
+    '';
 }
 
 (async () => {
