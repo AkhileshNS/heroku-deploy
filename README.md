@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -98,7 +98,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -136,7 +136,7 @@ jobs:
             SECRET_KEY
         env:
           NODE_ENV: production
-          SECRET_KEY: ${{ secret.MY_SECRET_KEY }}
+          SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
 ```
 
 Also, thanks to [Olav Sundfør](https://github.com/olaven) for adding the Docker feature and [Matt Stavola](https://github.com/mbStavola) for adding the ability to pass in build args.
@@ -164,7 +164,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -191,7 +191,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -220,7 +220,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -249,7 +249,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -280,7 +280,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -310,7 +310,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -341,7 +341,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -376,7 +376,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
