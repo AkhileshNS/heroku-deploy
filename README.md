@@ -70,6 +70,7 @@ The action comes with additional options that you can use to configure your proj
 | dontuseforce               | false    | Set this to true if you don't want to use --force when switching branches                                                                                                                           | true or false                                         |
 | usedocker                  | false    | Will deploy using Dockerfile in project root                                                                                                                                                        | true or false                                         |
 | docker_heroku_process_type | false    | Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled. Defaults to "web" (Thanks to [singleton11](https://github.com/singleton11) for adding this feature) | web, worker                                           |
+| docker_build_args          | false    | A list of args to pass into the Docker build. This option only makes sense when usedocker enabled.                                                                                                  | NODE_ENV                                              |
 | appdir                     | false    | Set if your app is located in a subdirectory                                                                                                                                                        | api, apis/python                                      |
 | healthcheck                | false    | A URL to which a healthcheck is performed (checks for 200 request)                                                                                                                                  | https://demo-rest-api.herokuapp.com                   |
 | checkstring                | false    | Value to check for when conducting healthcheck requests                                                                                                                                             | ok                                                    |
@@ -105,9 +106,40 @@ jobs:
           usedocker: true
 ```
 
-P.S: Keep in mind that if you deploy once using docker, the same heroku app is not compatible with a non-docker setup and similarly, you cannot deploy a dockerized setup to a non-docker heroku app.
+Keep in mind that if you deploy once using docker, the same heroku app is not compatible with a non-docker setup and similarly, you cannot deploy a dockerized setup to a non-docker heroku app.
 
-Also thanks to [Olav Sundfør](https://github.com/olaven) for adding this feature
+If you need to pass in any ARGs for the Docker build, you may provide a list of arg names which automatically pull from the environment.
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
+          heroku_email: "YOUR EMAIL"
+          usedocker: true
+          docker_build_args: |
+            NODE_ENV
+            SECRET_KEY
+        env:
+          NODE_ENV: production
+          SECRET_KEY: ${{ secret.MY_SECRET_KEY }}
+```
+
+Also, thanks to [Olav Sundfør](https://github.com/olaven) for adding the Docker feature and [Matt Stavola](https://github.com/mbStavola) for adding the ability to pass in build args.
 
 ### Deploy with custom Buildpacks
 
