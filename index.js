@@ -111,7 +111,7 @@ if (heroku.appdir) {
 // Collate docker build args into arg list
 if (heroku.dockerBuildArgs) {
   heroku.dockerBuildArgs = heroku.dockerBuildArgs.split('\n')
-    .map(arg => `${arg}=\${{ env.${arg} }}`)
+    .map(arg => `${arg}=${process.env[arg]}`)
     .join(',');
   heroku.dockerBuildArgs = heroku.dockerBuildArgs ?
     `--arg ${heroku.dockerBuildArgs}` :
