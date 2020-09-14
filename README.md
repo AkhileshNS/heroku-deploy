@@ -75,6 +75,7 @@ The action comes with additional options that you can use to configure your proj
 | checkstring                | false    | Value to check for when conducting healthcheck requests                                                                                                                                             | ok                                                    |
 | delay                      | false    | Time (in seconds) to wait before performing healthcheck. Defaults to 0 seconds                                                                                                                      | 5                                                     |
 | procfile                   | false    | Contents of the Procfile to save and deploy                                                                                                                                                         | web: npm start                                        |
+| rollbackonhealthcheckfailed | false | When set to true this will attempt to rollback to the previous release if the healthcheck fails | true or false |
 
 ## Examples
 
@@ -320,6 +321,34 @@ jobs:
 ```
 
 By default, the delay will be 0 if you choose to not set it
+
+### Rollback on healthcheck failure
+You can set the rollbackonhealthcheckfailed option to ensure that your application is rolled back if the healthcheck fails.
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master # Changing the branch here would also work
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
+          heroku_email: "YOUR EMAIL"
+          healthcheck: "https://[YOUR APP's NAME].herokuapp.com/health"
+          checkstring: "ok"
+          rollbackonhealthcheckfailed: true
+```
+By default, the application will not be rolled back if the healthcheck fails.
 
 ## Environment Variables
 
