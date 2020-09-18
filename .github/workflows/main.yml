@@ -22,6 +22,7 @@ jobs:
           heroku_email: "nsakhilesh02@gmail.com"
           appdir: "tests/test-1"
           healthcheck: "https://akhileshns-hd-test-1.herokuapp.com/"
+          env_file: ".env"
         env:
           HD_CHECK: "true"
       - run: npm run test-action https://akhileshns-hd-test-1.herokuapp.com/

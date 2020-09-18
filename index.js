@@ -30,12 +30,16 @@ const addRemote = ({ app_name, buildpack }) => {
   }
 };
 
-const addConfig = ({ app_name }) => {
+const addConfig = ({ app_name, env_file, appdir }) => {
   const configVars = [];
   for (let key in process.env) {
     if (key.startsWith("HD_")) {
       configVars.push(key.substring(3) + "=" + process.env[key]);
     }
+  }
+  if (env_file) {
+    const env = fs.readFileSync(path.join(appdir, env_file));
+    configVars = [...configVars, env.split("\n")];
   }
   if (configVars.length !== 0) {
     execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
@@ -80,7 +84,11 @@ const deploy = ({
   }
 };
 
-const healthcheckFailed = ({ rollbackonhealthcheckfailed, app_name, appdir }) => {
+const healthcheckFailed = ({
+  rollbackonhealthcheckfailed,
+  app_name,
+  appdir,
+}) => {
   if (rollbackonhealthcheckfailed) {
     execSync(
       `heroku rollback --app ${app_name}`,
@@ -94,7 +102,7 @@ const healthcheckFailed = ({ rollbackonhealthcheckfailed, app_name, appdir }) =>
       "Health Check Failed. Error deploying Server. Please check your logs on Heroku to try and diagnose the problem"
     );
   }
-}
+};
 
 // Input Variables
 let heroku = {
@@ -112,7 +120,9 @@ let heroku = {
   checkstring: core.getInput("checkstring"),
   delay: parseInt(core.getInput("delay")),
   procfile: core.getInput("procfile"),
-  rollbackonhealthcheckfailed: core.getInput("rollbackonhealthcheckfailed") === "true" ? true : false,
+  rollbackonhealthcheckfailed:
+    core.getInput("rollbackonhealthcheckfailed") === "true" ? true : false,
+  env_file: core.getInput("env_file"),
 };
 
 // Formatting
@@ -127,12 +137,13 @@ if (heroku.appdir) {
 
 // Collate docker build args into arg list
 if (heroku.dockerBuildArgs) {
-  heroku.dockerBuildArgs = heroku.dockerBuildArgs.split('\n')
-    .map(arg => `${arg}=${process.env[arg]}`)
-    .join(',');
-  heroku.dockerBuildArgs = heroku.dockerBuildArgs ?
-    `--arg ${heroku.dockerBuildArgs}` :
-    '';
+  heroku.dockerBuildArgs = heroku.dockerBuildArgs
+    .split("\n")
+    .map((arg) => `${arg}=${process.env[arg]}`)
+    .join(",");
+  heroku.dockerBuildArgs = heroku.dockerBuildArgs
+    ? `--arg ${heroku.dockerBuildArgs}`
+    : "";
 }
 
 (async () => {
