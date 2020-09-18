@@ -392,7 +392,7 @@ On that note, if you've set these variables and have deployed your app, you can 
 
 ### ENV File
 
-You can if you wish also pass the path to an env file as an option to the action. The action will then read that file and set the config vars accordingly in Heroku
+You can if you wish also pass the path to an env file (with respect to your appdir path) as an option to the action. The action will then read that file and set the config vars accordingly in Heroku
 
 _.github/workflows/main.yml_
 
