@@ -55,6 +55,10 @@ inputs:
     description: "Contents of the Procfile to save and deploy"
     required: false
     default: ""
+  rollbackonhealthcheckfailed:
+    description: "When set to true this will attempt to rollback to the previous release if the healthcheck fails"
+    required: false
+    default: "false"
 outputs:
   status:
     description: "The Success/Failure of the action"

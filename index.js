@@ -80,6 +80,22 @@ const deploy = ({
   }
 };
 
+const healthcheckFailed = ({ rollbackonhealthcheckfailed, app_name, appdir }) => {
+  if (rollbackonhealthcheckfailed) {
+    execSync(
+      `heroku rollback --app ${app_name}`,
+      appdir ? { cwd: appdir } : null
+    );
+    core.setFailed(
+      "Health Check Failed. Error deploying Server. Deployment has been rolled back. Please check your logs on Heroku to try and diagnose the problem"
+    );
+  } else {
+    core.setFailed(
+      "Health Check Failed. Error deploying Server. Please check your logs on Heroku to try and diagnose the problem"
+    );
+  }
+}
+
 // Input Variables
 let heroku = {
   api_key: core.getInput("heroku_api_key"),
@@ -96,6 +112,7 @@ let heroku = {
   checkstring: core.getInput("checkstring"),
   delay: parseInt(core.getInput("delay")),
   procfile: core.getInput("procfile"),
+  rollbackonhealthcheckfailed: core.getInput("rollbackonhealthcheckfailed") === "true" ? true : false,
 };
 
 // Formatting
@@ -168,16 +185,12 @@ if (heroku.dockerBuildArgs) {
       try {
         const res = await p(heroku.healthcheck);
         if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
-          core.setFailed(
-            "Health Check Failed. Error deploying Server. Please check your logs on Heroku to try and diagnose the problem"
-          );
+          healthcheckFailed(heroku);
         }
         console.log(res.body.toString());
       } catch (err) {
         console.log(err.message);
-        core.setFailed(
-          "Health Check Failed. Error deploying Server. Please check your logs on Heroku to try and diagnose the problem"
-        );
+        healthcheckFailed(heroku);
       }
     }
 
