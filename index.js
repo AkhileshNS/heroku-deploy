@@ -38,8 +38,14 @@ const addConfig = ({ app_name, env_file, appdir }) => {
     }
   }
   if (env_file) {
-    const env = fs.readFileSync(path.join(appdir, env_file));
-    configVars = [...configVars, env.split("\n")];
+    const env = fs.readFileSync(path.join(appdir, env_file), "utf8");
+    configVars = [
+      ...configVars,
+      ...env
+        .split("\n")
+        .filter((item) => /(\w+)=(.+)/.test(item))
+        .map((item) => item.trim()),
+    ];
   }
   if (configVars.length !== 0) {
     execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
