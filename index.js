@@ -39,7 +39,12 @@ const addConfig = ({ app_name, env_file, appdir }) => {
   }
   if (env_file) {
     const env = fs.readFileSync(path.join(appdir, env_file), "utf8");
-    configVars = [...configVars, ...require("dotenv").parse(env)];
+    const variables = require("dotenv").parse(env);
+    const newVars = [];
+    for (let key in variables) {
+      newVars.push(key + "=" + variables[key]);
+    }
+    configVars = [...configVars, ...newVars];
   }
   if (configVars.length !== 0) {
     execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
