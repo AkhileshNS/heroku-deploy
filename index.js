@@ -116,8 +116,8 @@ let heroku = {
   app_name: core.getInput("heroku_app_name"),
   buildpack: core.getInput("buildpack"),
   branch: core.getInput("branch"),
-  dontuseforce: core.getInput("dontuseforce") === "true" ? true : false,
-  usedocker: core.getInput("usedocker") === "true" ? true : false,
+  dontuseforce: core.getInput("dontuseforce") === "false" ? false : true,
+  usedocker: core.getInput("usedocker") === "false" ? false : true,
   dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
   dockerBuildArgs: core.getInput("docker_build_args"),
   appdir: core.getInput("appdir"),
@@ -126,8 +126,9 @@ let heroku = {
   delay: parseInt(core.getInput("delay")),
   procfile: core.getInput("procfile"),
   rollbackonhealthcheckfailed:
-    core.getInput("rollbackonhealthcheckfailed") === "true" ? true : false,
+    core.getInput("rollbackonhealthcheckfailed") === "false" ? false : true,
   env_file: core.getInput("env_file"),
+  justlogin: core.getInput("justlogin") === "false" ? false : true,
 };
 
 // Formatting
@@ -154,6 +155,14 @@ if (heroku.dockerBuildArgs) {
 (async () => {
   // Program logic
   try {
+    // Just Login
+    if (heroku.justlogin) {
+      execSync(createCatFile(heroku));
+      console.log("Created and wrote to ~/.netrc");
+      execSync("heroku login");
+      return;
+    }
+
     execSync(`git config user.name "Heroku-Deploy"`);
     execSync(`git config user.email "${heroku.email}"`);
     const status = execSync("git status --porcelain").toString().trim();

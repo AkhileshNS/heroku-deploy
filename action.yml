@@ -63,6 +63,10 @@ inputs:
     description: "Path to an localized env file"
     required: false
     default: ""
+  justlogin:
+    description: "Set to true if you want the action to just login to Heroku and nothing else"
+    required: false
+    default: "false"
 outputs:
   status:
     description: "The Success/Failure of the action"
