@@ -51,11 +51,9 @@ const addConfig = ({ app_name, env_file, appdir }) => {
   }
 };
 
-const createProcfile = ({ procfile, appdir, email }) => {
+const createProcfile = ({ procfile, appdir }) => {
   if (procfile) {
     fs.writeFileSync(path.join(appdir, "Procfile"), procfile);
-    execSync(`git config user.name "Heroku-Deploy"`);
-    execSync(`git config user.email "${email}"`);
     execSync(`git add -A && git commit -m "Added Procfile"`);
     console.log("Written Procfile with custom configuration");
   }
@@ -156,6 +154,15 @@ if (heroku.dockerBuildArgs) {
 (async () => {
   // Program logic
   try {
+    execSync(`git config user.name "Heroku-Deploy"`);
+    execSync(`git config user.email "${heroku.email}"`);
+    const status = execSync("git status --porcelain").toString().trim();
+    if (status) {
+      execSync(
+        'git add -A && git commit -m "Commited changes from previous actions"'
+      );
+    }
+
     // Check if using Docker
     if (!heroku.usedocker) {
       // Check if Repo clone is shallow
