@@ -83,6 +83,7 @@ The action comes with additional options that you can use to configure your proj
 | rollbackonhealthcheckfailed | false    | When set to true this will attempt to rollback to the previous release if the healthcheck fails | true or false                                         |
 | env_file                    | false    | path to an env file (with respect to appdir)                 | /.env                                                 |
 | justlogin                   | false    | Set to true if you want the action to just login to Heroku and nothing else | true or false                                         |
+| region                      | false    | The region in which you would like to deploy a server        | eu or dublin                                          |
 
 ## Examples
 
