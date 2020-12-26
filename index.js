@@ -26,7 +26,7 @@ const addRemote = ({ app_name, buildpack, region, team }) => {
         app_name +
         (buildpack ? " --buildpack " + buildpack : "") +
         (region ? " --region " + region : "") +
-        (team ? "--team" + team : "")
+        (team ? " --team " + team : "")
     );
     console.log("Successfully created a new heroku app");
   }
