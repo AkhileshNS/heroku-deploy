@@ -16,7 +16,7 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const addRemote = ({ app_name, buildpack, region }) => {
+const addRemote = ({ app_name, buildpack, region, team }) => {
   try {
     execSync("heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
@@ -25,7 +25,8 @@ const addRemote = ({ app_name, buildpack, region }) => {
       "heroku create " +
         app_name +
         (buildpack ? " --buildpack " + buildpack : "") +
-        (region ? " --region " + region : "")
+        (region ? " --region " + region : "") +
+        (team ? "--team" + team : "")
     );
     console.log("Successfully created a new heroku app");
   }
@@ -131,6 +132,7 @@ let heroku = {
   env_file: core.getInput("env_file"),
   justlogin: core.getInput("justlogin") === "false" ? false : true,
   region: core.getInput("region"),
+  team: core.getInput("team"),
 };
 
 // Formatting
