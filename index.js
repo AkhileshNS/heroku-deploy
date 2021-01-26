@@ -21,14 +21,14 @@ const addRemote = ({ app_name, buildpack, region, team }) => {
     execSync("heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
   } catch (err) {
-    execSync(
-      "heroku create " +
-        app_name +
-        (buildpack ? " --buildpack " + buildpack : "") +
-        (region ? " --region " + region : "") +
-        (team ? " --team " + team : "")
-    );
-    console.log("Successfully created a new heroku app");
+    // execSync(
+    //   "heroku create " +
+    //     app_name +
+    //     (buildpack ? " --buildpack " + buildpack : "") +
+    //     (region ? " --region " + region : "") +
+    //     (team ? " --team " + team : "")
+    // );
+    console.log("Not creating a new heroku app, deploy will fail");
   }
 };
 
