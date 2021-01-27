@@ -239,6 +239,14 @@ if (heroku.dockerBuildArgs) {
       "Successfully deployed heroku app from branch " + heroku.branch
     );
   } catch (err) {
-    core.setFailed(err.toString());
+    if (heroku.dontautocreate && err.toString().includes("Couldn't find that app")) {
+        core.setOutput(
+            "status",
+            "Skipped deploy to heroku app from branch " + heroku.branch
+        )
+    }
+    else {
+        core.setFailed(err.toString());
+    }
   }
 })();
