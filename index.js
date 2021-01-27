@@ -16,19 +16,20 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const addRemote = ({ app_name, buildpack, region, team }) => {
+const addRemote = ({ app_name, dontautocreate, buildpack, region, team }) => {
   try {
     execSync("heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
   } catch (err) {
-    // execSync(
-    //   "heroku create " +
-    //     app_name +
-    //     (buildpack ? " --buildpack " + buildpack : "") +
-    //     (region ? " --region " + region : "") +
-    //     (team ? " --team " + team : "")
-    // );
-    console.log("Not creating a new heroku app, deploy will fail");
+    if (dontautocreate) throw err
+    
+    execSync(
+      "heroku create " +
+        app_name +
+        (buildpack ? " --buildpack " + buildpack : "") +
+        (region ? " --region " + region : "") +
+        (team ? " --team " + team : "")
+    );
   }
 };
 
@@ -119,6 +120,7 @@ let heroku = {
   buildpack: core.getInput("buildpack"),
   branch: core.getInput("branch"),
   dontuseforce: core.getInput("dontuseforce") === "false" ? false : true,
+  dontautocreate: core.getInput("dontautocreate") === "false" ? false : true,
   usedocker: core.getInput("usedocker") === "false" ? false : true,
   dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
   dockerBuildArgs: core.getInput("docker_build_args"),
