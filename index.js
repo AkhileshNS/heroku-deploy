@@ -87,10 +87,11 @@ const deploy = ({
     execSync(`git fetch heroku ${remote_branch}`);
     // Push
     if (appdir === "") {
-      execSync(`git push heroku ${branch}:refs/heads/${remote_branch} ${force}`);
+      execSync(`git push heroku ${branch}:refs/heads/${remote_branch} ${force}`, {maxBuffer: 104857600});
     } else {
       execSync(
-        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/${remote_branch}`
+        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/${remote_branch}`,
+        {maxBuffer: 104857600}
       );
     }
   }
