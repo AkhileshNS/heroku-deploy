@@ -24,6 +24,10 @@ inputs:
     description: "Set this to true if you don't want to use --force when switching branches"
     default: "false"
     required: false
+  dontautocreate:
+    description: "Set this to true if you don't want to automatically create the Heroku app"
+    default: "false"
+    required: false
   usedocker:
     description: "Will deploy using Dockerfile in project root."
     default: "false"
