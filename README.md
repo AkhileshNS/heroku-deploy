@@ -9,23 +9,24 @@ This is a very simple GitHub action that allows you to deploy to Heroku. The act
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
-2. [Options](#options)
-3. [Examples](#examples)
+2. [Important Note](#important-note)
+3. [Options](#options)
+4. [Examples](#examples)
    - [Deploy with Docker](#deploy-with-docker)
    - [Deploy with custom Buildpacks](#deploy-with-custom-buildpacks)
    - [Deploy Subdirectory](#deploy-subdirectory)
    - [Deploy Custom Branch](#deploy-custom-branch)
-4. [Health Check](#health-check)
+5. [Health Check](#health-check)
    - [Advanced Usage](#advanced-usage)
    - [Adding Delay](#adding-delay)
    - [Rollback on healthcheck failure](#rollback-on-healthcheck-failure)
-5. [Environment Variables](#environment-variables)
+6. [Environment Variables](#environment-variables)
    - [ENV File](#env-file)
-6. [Procfile Passing](#procfile-passing)
-7. [Deploying to a team](#deploying-to-a-team)
-8. [Just Login](#just-login)
-9. [Important Notes](#important-notes)
-10. [License](#license)
+7. [Procfile Passing](#procfile-passing)
+8. [Deploying to a team](#deploying-to-a-team)
+9. [Just Login](#just-login)
+10. [Important Notes](#important-notes)
+11. [License](#license)
 
 ## Getting Started
 
@@ -60,6 +61,33 @@ In your Repo, go to Settings -> Secrets and click on "New Secret". Then enter HE
 You can now push your project to GitHub and it will be automatically deployed to Heroku henceforth.
 
 You learn more about GitHub Secrets [here](https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) and GitHub Actions [here](https://docs.github.com/en/actions)
+
+## Important Note
+
+**Please Note**: Git has recently announced that it is planning to switch the default branch's name from "**master**" to "**main**". For this reason, the Action also pushes to the "**main**" branch in the heroku origin by default. If you created your heroku app before **21st July 2020**, then there's a good chance your app is still using the "**master**" branch. if you are using versions **3.10.9** or newer and run into this error, please switch your GitHub workflow file to include `remote_branch: master` as an option in the Action. Ex:
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.9.9 
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" 
+          heroku_email: "YOUR EMAIL"
+          remote_branch: master # <- Include this
+```
 
 ## Options
 
