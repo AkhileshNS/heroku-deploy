@@ -222,6 +222,9 @@ if (heroku.dockerBuildArgs) {
 
       try {
         const res = await p(heroku.healthcheck);
+        if (res.statusCode !== 200) {
+          healthcheckFailed(heroku);
+        }
         if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
           healthcheckFailed(heroku);
         }
