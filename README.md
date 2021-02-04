@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -72,6 +72,7 @@ The action comes with additional options that you can use to configure your proj
 | heroku_app_name             | true     | The appname to use for deploying/updating                                                                                                                                                           | demo-rest-api                                         |
 | buildpack                   | false    | An optional buildpack to use when creating the heroku application                                                                                                                                   | https://github.com/heroku/heroku-buildpack-static.git |
 | branch                      | false    | The branch that you would like to deploy to Heroku. Defaults to "HEAD"                                                                                                                              | master, dev, test                                     |
+| dontautocreate                  | false    | Set this to true if you don't want to automatically create the Heroku app                                                                                                                          | true or false                                         |
 | dontuseforce                | false    | Set this to true if you don't want to use --force when switching branches                                                                                                                           | true or false                                         |
 | usedocker                   | false    | Will deploy using Dockerfile in project root                                                                                                                                                        | true or false                                         |
 | docker_heroku_process_type  | false    | Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled. Defaults to "web" (Thanks to [singleton11](https://github.com/singleton11) for adding this feature) | web, worker                                           |
@@ -86,6 +87,7 @@ The action comes with additional options that you can use to configure your proj
 | justlogin                   | false    | Set to true if you want the action to just login to Heroku and nothing else                                                                                                                         | true or false                                         |
 | region                      | false    | The region in which you would like to deploy a server                                                                                                                                               | eu or dublin                                          |
 | team                        | false    | If deploying to an organization, then specify the name of the team or organization here                                                                                                             | team-xyz                                              |
+| remote_branch                        | false    | The remote branch to which you would like to push                                                                                                             | main                                              |
 
 ## Examples
 
@@ -108,7 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -135,7 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -174,7 +176,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -201,7 +203,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -230,12 +232,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
           heroku_email: "YOUR EMAIL"
           branch: "dev"
+```
+
+Though this is also possible to do with GitHub Actions, click [here](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#on) for more information
+
+### Deploy custom remote branch
+
+You can use the **remote_branch** option to deploy an app to another remote branch
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master # Changing the branch here would also work
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
+          heroku_email: "YOUR EMAIL"
+          remote_branch: "main"
 ```
 
 Though this is also possible to do with GitHub Actions, click [here](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#on) for more information
@@ -259,7 +290,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -290,7 +321,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -320,7 +351,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -350,7 +381,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -383,7 +414,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -418,7 +449,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -465,7 +496,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -494,7 +525,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9
+      - uses: akhileshns/heroku-deploy@v3.9.9
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME"
@@ -521,7 +552,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.9 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.9.9 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ""
