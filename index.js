@@ -70,7 +70,6 @@ const deploy = ({
   dockerHerokuProcessType,
   dockerBuildArgs,
   appdir,
-  remote_branch: passed_remote_branch,
 }) => {
   const force = !dontuseforce ? "--force" : "";
   if (usedocker) {
@@ -83,25 +82,24 @@ const deploy = ({
       appdir ? { cwd: appdir } : null
     );
   } else {
-    // Push
-    let remote_branch =
-      passed_remote_branch ||
-      execSync(
-        "git remote show heroku | grep 'HEAD' | cut -d':' -f2 | sed -e 's/^ *//g' -e 's/ *$//g'"
-      )
-        .toString()
-        .trim();
+    let remote_branch = execSync(
+      "git remote show heroku | grep 'HEAD' | cut -d':' -f2 | sed -e 's/^ *//g' -e 's/ *$//g'"
+    )
+      .toString()
+      .trim();
 
-    remote_branch = remote_branch === "(unknown)" ? "main" : remote_branch;
+    if (remote_branch === "master") {
+      execSync("heroku plugins:install heroku-repo");
+      execSync("heroku repo:reset -a " + app_name);
+    }
 
     if (appdir === "") {
-      execSync(
-        `git push heroku ${branch}:refs/heads/${remote_branch} ${force}`,
-        { maxBuffer: 104857600 }
-      );
+      execSync(`git push heroku ${branch}:refs/heads/main ${force}`, {
+        maxBuffer: 104857600,
+      });
     } else {
       execSync(
-        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/${remote_branch}`,
+        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/main`,
         { maxBuffer: 104857600 }
       );
     }
@@ -151,7 +149,6 @@ let heroku = {
   justlogin: core.getInput("justlogin") === "false" ? false : true,
   region: core.getInput("region"),
   team: core.getInput("team"),
-  remote_branch: core.getInput("remote_branch"),
 };
 
 // Formatting
