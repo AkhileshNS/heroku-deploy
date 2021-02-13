@@ -84,13 +84,15 @@ const deploy = ({
     );
   } else {
     // Push
-    const remote_branch =
+    let remote_branch =
       passed_remote_branch ||
       execSync(
         "git remote show heroku | grep 'HEAD' | cut -d':' -f2 | sed -e 's/^ *//g' -e 's/ *$//g'"
       )
         .toString()
         .trim();
+
+    remote_branch = remote_branch === "(unknown)" ? "main" : remote_branch;
 
     execSync("git fetch heroku " + remote_branch);
     if (appdir === "") {
