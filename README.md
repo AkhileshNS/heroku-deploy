@@ -70,6 +70,8 @@ You learn more about GitHub Secrets [here](https://docs.github.com/en/actions/co
 git push heroku YOUR_BRANCH:refs/heads/main
 ```
 
+Also the `remote_branch` property no longer exists in the latest release of the Action. If you still have this as part of the `3.10.9` release. Please remove it as it may cause problems in your workflow
+
 ## Options
 
 The action comes with additional options that you can use to configure your project's behavior on Heroku. You can setup these options under the "with" object as presented above:
