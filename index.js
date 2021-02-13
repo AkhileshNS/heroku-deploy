@@ -181,7 +181,7 @@ if (heroku.dockerBuildArgs) {
     if (heroku.justlogin) {
       execSync(createCatFile(heroku));
       console.log("Created and wrote to ~/.netrc");
-      execSync("heroku login");
+
       return;
     }
 
@@ -212,7 +212,6 @@ if (heroku.dockerBuildArgs) {
 
     createProcfile(heroku);
 
-    execSync("heroku login");
     if (heroku.usedocker) {
       execSync("heroku container:login");
     }
