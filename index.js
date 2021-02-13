@@ -94,7 +94,6 @@ const deploy = ({
 
     remote_branch = remote_branch === "(unknown)" ? "main" : remote_branch;
 
-    execSync("git fetch heroku " + remote_branch);
     if (appdir === "") {
       execSync(
         `git push heroku ${branch}:refs/heads/${remote_branch} ${force}`,
