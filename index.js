@@ -94,7 +94,7 @@ const deploy = ({
       });
     } else {
       execSync(
-        `git subtree push --prefix ${appdir} heroku ${branch_settings} ${force}`,
+        `git subtree push --prefix ${appdir} heroku ${branch_settings}`,
         { maxBuffer: 104857600 }
       );
     }
