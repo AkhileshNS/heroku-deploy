@@ -91,6 +91,8 @@ const deploy = ({
       )
         .toString()
         .trim();
+
+    execSync("git fetch heroku " + remote_branch);
     if (appdir === "") {
       execSync(
         `git push heroku ${branch}:refs/heads/${remote_branch} ${force}`,
