@@ -21,8 +21,8 @@ const addRemote = ({ app_name, dontautocreate, buildpack, region, team }) => {
     execSync("heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
   } catch (err) {
-    if (dontautocreate) throw err
-    
+    if (dontautocreate) throw err;
+
     execSync(
       "heroku create " +
         app_name +
@@ -83,15 +83,19 @@ const deploy = ({
       appdir ? { cwd: appdir } : null
     );
   } else {
-    // Fetch before pushing
-    execSync(`git fetch heroku ${remote_branch}`);
+    const branch_settings = remote_branch
+      ? `${branch}:refs/heads/${remote_branch}`
+      : branch;
+
     // Push
     if (appdir === "") {
-      execSync(`git push heroku ${branch}:refs/heads/${remote_branch} ${force}`, {maxBuffer: 104857600});
+      execSync(`git push heroku ${branch_settings} ${force}`, {
+        maxBuffer: 104857600,
+      });
     } else {
       execSync(
-        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/${remote_branch}`,
-        {maxBuffer: 104857600}
+        `git subtree push --prefix ${appdir} heroku ${branch_settings} ${force}`,
+        { maxBuffer: 104857600 }
       );
     }
   }
@@ -248,14 +252,16 @@ if (heroku.dockerBuildArgs) {
       "Successfully deployed heroku app from branch " + heroku.branch
     );
   } catch (err) {
-    if (heroku.dontautocreate && err.toString().includes("Couldn't find that app")) {
-        core.setOutput(
-            "status",
-            "Skipped deploy to heroku app from branch " + heroku.branch
-        )
-    }
-    else {
-        core.setFailed(err.toString());
+    if (
+      heroku.dontautocreate &&
+      err.toString().includes("Couldn't find that app")
+    ) {
+      core.setOutput(
+        "status",
+        "Skipped deploy to heroku app from branch " + heroku.branch
+      );
+    } else {
+      core.setFailed(err.toString());
     }
   }
 })();

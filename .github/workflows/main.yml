@@ -23,7 +23,6 @@ jobs:
           appdir: "tests/test-1"
           healthcheck: "https://akhileshns-hd-test-1.herokuapp.com/"
           env_file: ".env"
-          remote_branch: master
         env:
           HD_CHECK: "true"
       - run: npm run test-action https://akhileshns-hd-test-1.herokuapp.com/
@@ -48,7 +47,6 @@ jobs:
           buildpack: "https://github.com/heroku/heroku-buildpack-static.git"
           healthcheck: "https://akhileshns-hd-test-2.herokuapp.com/"
           delay: 5
-          remote_branch: master
       - run: npm run test-action https://akhileshns-hd-test-2.herokuapp.com/
 
   deploy-test-3:
@@ -70,7 +68,6 @@ jobs:
           appdir: "tests/test-3"
           usedocker: true
           healthcheck: "https://akhileshns-hd-test-3.herokuapp.com/"
-          remote_branch: master
       - run: npm run test-action https://akhileshns-hd-test-3.herokuapp.com/
 
   deploy-test-4:
@@ -93,5 +90,4 @@ jobs:
           healthcheck: "https://akhileshns-hd-test-4.herokuapp.com/health"
           checkstring: "ok"
           procfile: "web: gunicorn index:app"
-          remote_branch: master
       - run: npm run test-action https://akhileshns-hd-test-4.herokuapp.com/
