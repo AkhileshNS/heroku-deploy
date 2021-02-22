@@ -97,6 +97,7 @@ The action comes with additional options that you can use to configure your proj
 | env_file                    | false    | path to an env file (with respect to appdir)                                                                                                                                                        | /.env                                                 |
 | justlogin                   | false    | Set to true if you want the action to just login to Heroku and nothing else                                                                                                                         | true or false                                         |
 | region                      | false    | The region in which you would like to deploy a server                                                                                                                                               | eu or dublin                                          |
+| stack                      | false    | Set stack of your heroku app if you need to change. Default: heroku-20                                                                                       | container                                          |
 | team                        | false    | If deploying to an organization, then specify the name of the team or organization here                                                                                                             | team-xyz                                              |
 
 ## Examples
@@ -277,6 +278,37 @@ jobs:
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
           heroku_email: "YOUR EMAIL"
           remote_branch: "main"
+```
+
+Though this is also possible to do with GitHub Actions, click [here](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#on) for more information
+
+### Set stack for your app
+
+In some cases, you need to change the default stack - heroku-20.
+For example, If you are building docker images with heroku yml, you need to change the stack to container.
+You can use the **stack** option to change stack for your app.
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master # Changing the branch here would also work
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.11.10 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
+          heroku_email: "YOUR EMAIL"
+          stack: "container"
 ```
 
 Though this is also possible to do with GitHub Actions, click [here](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#on) for more information

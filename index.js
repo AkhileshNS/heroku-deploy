@@ -28,6 +28,7 @@ const addRemote = ({ app_name, dontautocreate, buildpack, region, team }) => {
         app_name +
         (buildpack ? " --buildpack " + buildpack : "") +
         (region ? " --region " + region : "") +
+        (stack ? " --stack " + stack : "") +
         (team ? " --team " + team : "")
     );
   }
@@ -148,6 +149,7 @@ let heroku = {
   env_file: core.getInput("env_file"),
   justlogin: core.getInput("justlogin") === "false" ? false : true,
   region: core.getInput("region"),
+  stack: core.getInput("stack"),
   team: core.getInput("team"),
 };
 
