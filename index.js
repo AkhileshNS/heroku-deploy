@@ -240,10 +240,13 @@ if (heroku.dockerBuildArgs) {
       try {
         const res = await p(heroku.healthcheck);
         if (res.statusCode !== 200) {
-          healthcheckFailed(heroku);
+          throw new Error(
+            "Status code of network request is not 200: Status code - " +
+              res.statusCode
+          );
         }
         if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
-          healthcheckFailed(heroku);
+          throw new Error("Failed to match the checkstring");
         }
         console.log(res.body.toString());
       } catch (err) {
