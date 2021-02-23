@@ -72,6 +72,8 @@ git push heroku YOUR_BRANCH:refs/heads/main
 
 Also the `remote_branch` property no longer exists in the latest release of the Action. If you still have this as part of the `3.10.9` release. Please remove it as it may cause problems in your workflow
 
+**Please Note**: While creating a new project on Heroku, **do not** enable the option for **Automatic Deployments** as this would result in an error when the GitHub Action is triggered.
+
 ## Options
 
 The action comes with additional options that you can use to configure your project's behavior on Heroku. You can setup these options under the "with" object as presented above:
