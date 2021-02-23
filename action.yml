@@ -75,6 +75,10 @@ inputs:
     description: "The region in which you would like to deploy a server"
     required: false
     default: ""
+  stack:
+    description: "Set stack of your heroku app if you need to change.Default : heroku-20"
+    required: false
+    default: ""
   team:
     description: "If deploying to an organization, then specify the name of the team or organization here"
     required: false
