@@ -16,7 +16,7 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const addRemote = ({ app_name, dontautocreate, buildpack, region, team }) => {
+const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack }) => {
   try {
     execSync("heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
