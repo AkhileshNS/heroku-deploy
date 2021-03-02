@@ -141,6 +141,7 @@ let heroku = {
   dockerBuildArgs: core.getInput("docker_build_args"),
   appdir: core.getInput("appdir"),
   healthcheck: core.getInput("healthcheck"),
+  healthcheckretries: parseInt(core.getInput("healthcheckretries")),
   checkstring: core.getInput("checkstring"),
   delay: parseInt(core.getInput("delay")),
   procfile: core.getInput("procfile"),
@@ -233,23 +234,38 @@ if (heroku.dockerBuildArgs) {
     }
 
     if (heroku.healthcheck) {
-      if (typeof heroku.delay === "number" && heroku.delay !== NaN) {
-        await sleep(heroku.delay * 1000);
-      }
+      const maxRetries = typeof heroku.healthcheckretries === "number" && heroku.healthcheckretries !== NaN ?
+        heroku.healthcheckretries : 1;
+      let err;
+      for (let tries = 0; tries < maxRetries; tries++) {
+        if (err) {
+          console.log(`Health check failed, trying again (${tries} of ${maxRetries})`);
+        }
 
-      try {
+        if (typeof heroku.delay === "number" && heroku.delay !== NaN) {
+          await sleep(heroku.delay * 1000);
+        }
+
         const res = await p(heroku.healthcheck);
         if (res.statusCode !== 200) {
-          throw new Error(
+          err = new Error(
             "Status code of network request is not 200: Status code - " +
               res.statusCode
           );
+          continue;
         }
         if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
-          throw new Error("Failed to match the checkstring");
+          err = new Error("Failed to match the checkstring");
+          continue;
         }
+
+        // Success
+        err = undefined;
         console.log(res.body.toString());
-      } catch (err) {
+        break;
+      }
+
+      if (err) {
         console.log(err.message);
         healthcheckFailed(heroku);
       }
