@@ -439,6 +439,38 @@ By default, the application will not be rolled back if the healthcheck fails.
 
 Thanks to [FridaTveit](https://github.com/FridaTveit) for adding this feature
 
+### Retry healthcheck
+
+You can set the healthcheckretries option to re-run the healthcheck some number of times before considering it a failure. Retries will be delayed by delay each time, not just initially.
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master # Changing the branch here would also work
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
+          heroku_email: "YOUR EMAIL"
+          healthcheck: "https://[YOUR APP's NAME].herokuapp.com/health"
+          healthcheckretries: 10 # Try 5 times before failing
+          healthcheckdelay: 30 # 30s delay, the last try (10th) will happen 5 minutes after the first
+          rollbackonhealthcheckfailed: true
+```
+
+By default healthcheck will only try once.
+
 ## Environment Variables
 
 Heroku offers a means of passing sensitive information to your app (such as api keys etc) via something it calls **config vars** which you can find in the settings of your heroku app. But sometimes you might want to store sensitive information (api keys etc) in GitHub Secrets instead just to ensure platform independence. If you choose to this, you can then pass those secrets to your heroku app by using the "env" object of the action:-
