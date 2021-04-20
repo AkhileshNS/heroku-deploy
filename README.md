@@ -88,8 +88,8 @@ The action comes with additional options that you can use to configure your proj
 | dontautocreate              | false    | Set this to true if you don't want to automatically create the Heroku app                                                                                                                           | true or false                                         |
 | dontuseforce                | false    | Set this to true if you don't want to use --force when switching branches                                                                                                                           | true or false                                         |
 | usedocker                   | false    | Will deploy using Dockerfile in project root                                                                                                                                                        | true or false                                         |
-| context_path                | false    | Set if you want to set path to use as build context (defaults to Dockerfile dir)                                                                                                                    | . , api                                               |
-| userecursive                | false    | Set this to true if you want to use --recursive for pushes Dockerfile.<process> found in current and subdirectories                                                                                 | true or false                                         |
+| context_path                | false    | Set if you want to set path to use as build context (defaults to Dockerfile dir)                                                                                                                    | ., api                                                |
+| userecursive                | false    | Set this to true if you want to use --recursive for pushes Dockerfile.process found in current and subdirectories                                                                                   | true or false                                         |
 | docker_heroku_process_type  | false    | Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled. Defaults to "web" (Thanks to [singleton11](https://github.com/singleton11) for adding this feature) | web, worker                                           |
 | docker_build_args           | false    | A list of args to pass into the Docker build. This option only makes sense when usedocker enabled.                                                                                                  | NODE_ENV                                              |
 | appdir                      | false    | Set if your app is located in a subdirectory                                                                                                                                                        | api, apis/python                                      |
@@ -166,7 +166,7 @@ jobs:
           SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
 ```
 
-You can use `userecursive` and `context_path` options if you storing Dockerfile in subdirectories, Heroku will searching Dockerfile in current and subdirectories and build at the context path.
+You can use `userecursive` and `context_path` options if your Dockerfile is located in a subdirectory. Heroku will search for Dockerfile in current and subdirectories then build at the context path.
 
 _.github/workflows/main.yml_
 
