@@ -1,6 +1,6 @@
 {
   "name": "heroku-deploy",
-  "version": "3.12.12",
+  "version": "4.0.0",
   "description": "A simple github action that dynamically deploys an app to heroku",
   "main": "lib/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "test": "node scripts/test",
     "test-action": "node scripts/test-action",
     "setup": "node scripts/setup",
-    "start": "node index"
+    "start": "npm run build && node dist/index"
   },
   "repository": {
     "type": "git",
