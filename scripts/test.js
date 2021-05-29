@@ -1,6 +1,10 @@
-const p = require("phin");
+const { execSync } = require("child_process");
 
 (async () => {
-  const res = await p("https://akhileshns-hd-test-1.herokuapp.com/");
-  console.log(res.statusCode === 200);
+  try {
+    const res = execSync("git status");
+    console.log(res.toString());
+  } catch (err) {
+    console.log(err.stderr.toString());
+  }
 })();
