@@ -14,7 +14,12 @@ EOF`;
 
 export const loginToHeroku = (heroku: IHeroku): boolean => {
   core.debug(ansi_colors.cyan + "STEP: Login to Heroku");
+
   execSync(createCatFile(heroku));
+  if (heroku.usedocker) {
+    execSync("heroku container:login");
+  }
+
   core.info(ansi_colors.green + "STEP: Login to Heroku - Success")
   return true;
 }
