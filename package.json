@@ -8,7 +8,8 @@
     "test": "node scripts/test",
     "test-action": "node scripts/test-action",
     "setup": "node scripts/setup",
-    "start": "npm run build && node dist/index"
+    "start": "npm run build && node dist/index",
+    "add-step": "node scripts/add-step"
   },
   "repository": {
     "type": "git",
