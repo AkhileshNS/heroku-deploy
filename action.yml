@@ -88,4 +88,4 @@ outputs:
     description: "The Success/Failure of the action"
 runs:
   using: "node12"
-  main: "index.js"
+  main: "dist/index.js"

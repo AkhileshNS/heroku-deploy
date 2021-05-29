@@ -2,8 +2,9 @@
   "name": "heroku-deploy",
   "version": "3.12.12",
   "description": "A simple github action that dynamically deploys an app to heroku",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "build": "tsc && ncc build --source-map --license licenses.txt",
     "test": "node scripts/test",
     "test-action": "node scripts/test-action",
     "setup": "node scripts/setup",
@@ -27,5 +28,12 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "phin": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^15.6.1",
+    "@vercel/ncc": "^0.28.6",
+    "js-yaml": "^4.1.0",
+    "prettier": "^2.3.0",
+    "typescript": "^4.3.2"
   }
 }

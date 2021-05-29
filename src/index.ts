@@ -5,9 +5,9 @@ const fs = require("fs");
 const path = require("path");
 
 // Support Functions
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const createCatFile = ({ email, api_key }) => `cat >~/.netrc <<EOF
+const createCatFile = ({ email, api_key }: IHeroku) => `cat >~/.netrc <<EOF
 machine api.heroku.com
     login ${email}
     password ${api_key}
@@ -16,7 +16,7 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack }) => {
+const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack }: IHeroku) => {
   try {
     execSync("heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
@@ -34,7 +34,7 @@ const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack })
   }
 };
 
-const addConfig = ({ app_name, env_file, appdir }) => {
+const addConfig = ({ app_name, env_file, appdir }: IHeroku) => {
   let configVars = [];
   for (let key in process.env) {
     if (key.startsWith("HD_")) {
@@ -55,7 +55,7 @@ const addConfig = ({ app_name, env_file, appdir }) => {
   }
 };
 
-const createProcfile = ({ procfile, appdir }) => {
+const createProcfile = ({ procfile, appdir }: IHeroku) => {
   if (procfile) {
     fs.writeFileSync(path.join(appdir, "Procfile"), procfile);
     execSync(`git add -A && git commit -m "Added Procfile"`);
@@ -71,7 +71,7 @@ const deploy = ({
   dockerHerokuProcessType,
   dockerBuildArgs,
   appdir,
-}) => {
+}: IHeroku) => {
   const force = !dontuseforce ? "--force" : "";
   if (usedocker) {
     execSync(
@@ -111,7 +111,7 @@ const healthcheckFailed = ({
   rollbackonhealthcheckfailed,
   app_name,
   appdir,
-}) => {
+}: IHeroku) => {
   if (rollbackonhealthcheckfailed) {
     execSync(
       `heroku rollback --app ${app_name}`,
@@ -127,8 +127,32 @@ const healthcheckFailed = ({
   }
 };
 
+interface IHeroku {
+  api_key: string;
+  email: string;
+  app_name: string;
+  buildpack: string;
+  branch: string;
+  dontuseforce: boolean;
+  dontautocreate: boolean;
+  usedocker: boolean;
+  dockerHerokuProcessType: string;
+  dockerBuildArgs: string;
+  appdir: string;
+  healthcheck: string;
+  checkstring: string;
+  delay: number;
+  procfile: string;
+  rollbackonhealthcheckfailed: boolean;
+  env_file: string;
+  justlogin: boolean;
+  region: string;
+  stack: string;
+  team: string;
+}
+
 // Input Variables
-let heroku = {
+let heroku: IHeroku = {
   api_key: core.getInput("heroku_api_key"),
   email: core.getInput("heroku_email"),
   app_name: core.getInput("heroku_app_name"),
@@ -167,7 +191,7 @@ if (heroku.appdir) {
 if (heroku.dockerBuildArgs) {
   heroku.dockerBuildArgs = heroku.dockerBuildArgs
     .split("\n")
-    .map((arg) => `${arg}="${process.env[arg]}"`)
+    .map((arg: string) => `${arg}="${process.env[arg]}"`)
     .join(",");
   heroku.dockerBuildArgs = heroku.dockerBuildArgs
     ? `--arg ${heroku.dockerBuildArgs}`
