@@ -4,3 +4,4 @@ export { loginToHeroku } from './loginToHeroku';
 export { configureGit } from './configureGit';
 export { createProcfile } from './createProcfile';
 export { addRemote } from './addRemote';
+export { addConfigVars } from './addConfigVars';

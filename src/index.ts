@@ -10,7 +10,8 @@ import * as steps from './steps';
     steps.justLogin(heroku) &&
     steps.configureGit(heroku) &&
     steps.createProcfile(heroku) &&
-    steps.addRemote(heroku)
+    steps.addRemote(heroku) &&
+    steps.addConfigVars(heroku)
   } catch (error) {
     core.setFailed(
       "stderr" in error 
