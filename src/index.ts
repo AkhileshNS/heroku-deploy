@@ -9,7 +9,8 @@ import * as steps from './steps';
     steps.loginToHeroku(heroku) &&
     steps.justLogin(heroku) &&
     steps.configureGit(heroku) &&
-    steps.createProcfile(heroku)
+    steps.createProcfile(heroku) &&
+    steps.addRemote(heroku)
   } catch (error) {
     core.setFailed(
       "stderr" in error 
