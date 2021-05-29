@@ -7,7 +7,9 @@ import * as steps from './steps';
 
     // Pipeline
     steps.loginToHeroku(heroku) &&
-    steps.justLogin(heroku)
+    steps.justLogin(heroku) &&
+    steps.configureGit(heroku) &&
+    steps.createProcfile(heroku)
   } catch (error) {
     core.setFailed(
       "stderr" in error 

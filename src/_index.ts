@@ -63,7 +63,7 @@ const createProcfile = ({ procfile, appdir }: IHeroku) => {
     execSync(`git add -A && git commit -m "Added Procfile"`);
     console.log("Written Procfile with custom configuration");
   }
-};
+}; 
 
 const deploy = ({
   dontuseforce,
