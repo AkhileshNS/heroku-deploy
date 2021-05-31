@@ -11,7 +11,9 @@ import * as steps from './steps';
     steps.configureGit(heroku) &&
     steps.createProcfile(heroku) &&
     steps.addRemote(heroku) &&
-    steps.addConfigVars(heroku) 
+    steps.addConfigVars(heroku) &&
+    steps.deploy(heroku) &&
+    (await steps.performHealthCheck(heroku))
   } catch (error) {
     core.setFailed(
       "stderr" in error 
