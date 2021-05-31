@@ -2,17 +2,23 @@ import core from '@actions/core';
 import { IHeroku } from '../types';
 import { ansi_colors } from '../util';
 
+const formatAppdir = (appdir: string) => 
+  appdir[0] === "." && appdir[1] === "/"
+  ? appdir.slice(2)
+  : appdir[0] === "/"
+  ? appdir.slice(1)
+  : appdir;
+
+const formatDockerBuildArgs = (dockerBuildArgs: string) => {
+  const res = dockerBuildArgs
+    .split("\n")
+    .map((arg: string) => `${arg}="${process.env[arg]}"`)
+    .join(",");
+  return res ? "--arg " + res : ""
+}
+
 export const getHerokuConfig = (): IHeroku => {
   core.debug(ansi_colors.cyan + "STEP: Getting Heroku Config")
-
-  // PRE FORMATTING
-  const _appdir = core.getInput("appdir");
-  const appdir =
-    _appdir[0] === "." && _appdir[1] === "/"
-      ? _appdir.slice(2)
-      : _appdir[0] === "/"
-      ? _appdir.slice(1)
-      : _appdir;
 
   const heroku = {
     api_key: core.getInput("heroku_api_key"),
@@ -24,8 +30,8 @@ export const getHerokuConfig = (): IHeroku => {
     dontautocreate: core.getInput("dontautocreate") === "false" ? false : true,
     usedocker: core.getInput("usedocker") === "false" ? false : true,
     dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
-    dockerBuildArgs: core.getInput("docker_build_args"),
-    appdir,
+    dockerBuildArgs: formatDockerBuildArgs(core.getInput("docker_build_args")),
+    appdir: formatAppdir(core.getInput("appdir")),
     healthcheck: core.getInput("healthcheck"),
     checkstring: core.getInput("checkstring"),
     delay: parseInt(core.getInput("delay")),
