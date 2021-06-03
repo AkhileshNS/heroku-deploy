@@ -13,7 +13,7 @@ machine git.heroku.com
 EOF`;
 
 export const loginToHeroku = (heroku: IHeroku): boolean => {
-  core.debug(ansi_colors.cyan + "STEP: Login to Heroku");
+  core.info(ansi_colors.cyan + "STEP: Login to Heroku");
 
   execSync(createCatFile(heroku));
   if (heroku.usedocker) {

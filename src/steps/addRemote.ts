@@ -5,11 +5,11 @@ import { IHeroku } from '../types';
 import { ansi_colors } from '../util';
 
 export const addRemote = (heroku: IHeroku): boolean => {
-  core.debug(ansi_colors.cyan + "STEP: Adding Remote");
+  core.info(ansi_colors.cyan + "STEP: Adding Remote");
   
   try {
     execSync("heroku git:remote --app " + heroku.app_name);
-    core.debug("Added git remote heroku");
+    core.info("Added git remote heroku");
   } catch (err) {
     if (heroku.dontautocreate) {
       throw err;

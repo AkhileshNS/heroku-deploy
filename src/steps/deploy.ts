@@ -56,7 +56,7 @@ export const deployGit = (heroku: IHeroku, shouldThrowError = false) => {
 }
 
 export const deploy = (heroku: IHeroku): boolean => {
-  core.debug(ansi_colors.cyan + "STEP: Deploying");
+  core.info(ansi_colors.cyan + "STEP: Deploying");
 
   deployDocker(heroku) &&
   fixRemoteBranch(heroku) &&

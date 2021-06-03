@@ -44,7 +44,7 @@ const rollback = (heroku: IHeroku) => {
 }
 
 export const performHealthCheck = async (heroku: IHeroku): Promise<boolean> => {
-  core.debug(ansi_colors.cyan + "STEP: Performing HealthCheck");
+  core.info(ansi_colors.cyan + "STEP: Performing HealthCheck");
   
   if (heroku.healthcheck) {
     (await delay(heroku)) &&

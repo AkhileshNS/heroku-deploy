@@ -18,7 +18,7 @@ const formatDockerBuildArgs = (dockerBuildArgs: string) => {
 }
 
 export const getHerokuConfig = (): IHeroku => {
-  core.debug(ansi_colors.cyan + "STEP: Getting Heroku Config")
+  core.info(ansi_colors.cyan + "STEP: Getting Heroku Config")
 
   const heroku = {
     api_key: core.getInput("heroku_api_key"),

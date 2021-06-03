@@ -7,7 +7,7 @@ import { ansi_colors } from '../util';
 
 export const createProcfile = (heroku: IHeroku): boolean => {
   if (heroku.procfile) {
-    core.debug(ansi_colors.cyan + "STEP: Creating Procfile");
+    core.info(ansi_colors.cyan + "STEP: Creating Procfile");
     
     fs.writeFileSync(path.join(heroku.appdir, "Procfile"), heroku.procfile);
     execSync(`git add -A && git commit -m "Added Procfile"`);

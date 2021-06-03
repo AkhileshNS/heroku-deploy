@@ -25,7 +25,7 @@ const unshallowRepo = (heroku: IHeroku): boolean => {
 }
 
 export const configureGit = (heroku: IHeroku): boolean => {
-  core.debug(ansi_colors.cyan + "STEP: Configuring git");
+  core.info(ansi_colors.cyan + "STEP: Configuring git");
 
   configureUserAndCommit(heroku) &&
   unshallowRepo(heroku)

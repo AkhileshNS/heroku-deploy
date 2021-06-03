@@ -31,7 +31,7 @@ const addVarsFromEnvFile = (heroku: IHeroku, vars: string[]): string[] => {
 }
 
 export const addConfigVars = (heroku: IHeroku): boolean => {
-  core.debug(ansi_colors.cyan + "STEP: Adding Configuration Variables from env and envfile");
+  core.info(ansi_colors.cyan + "STEP: Adding Configuration Variables from env and envfile");
   
   const envVars = addVarsFromEnv([]);
   const configVars = addVarsFromEnvFile(heroku, envVars);
