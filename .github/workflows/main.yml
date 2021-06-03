@@ -10,11 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm run setup tests/test-1/data.json
-      - run: |
-          git config --global user.email "nsakhilesh02@gmail.com"
-          git config --global user.name "AkhileshNS"
-          git add -A
-          git commit -m "Added data.json"
       - uses: akhileshns/heroku-deploy@v4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -25,7 +20,7 @@ jobs:
           env_file: ".env"
         env:
           HD_CHECK: "true"
-      - run: npm run test-action https://akhileshns-hd-test-1.herokuapp.com/
+      - run: npm i && npm run test-action https://akhileshns-hd-test-1.herokuapp.com/
 
   deploy-test-2:
     runs-on: ubuntu-latest
@@ -33,11 +28,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm run setup tests/test-2/public_html/index.html
-      - run: |
-          git config --global user.email "nsakhilesh02@gmail.com"
-          git config --global user.name "AkhileshNS"
-          git add -A
-          git commit -m "Added index.html"
       - uses: akhileshns/heroku-deploy@v4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -55,11 +45,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm run setup tests/test-3/data.json
-      - run: |
-          git config --global user.email "nsakhilesh02@gmail.com"
-          git config --global user.name "AkhileshNS"
-          git add -A
-          git commit -m "Added data.json"
       - uses: akhileshns/heroku-deploy@v4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -76,11 +61,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm run setup tests/test-4/data.json
-      - run: |
-          git config --global user.email "nsakhilesh02@gmail.com"
-          git config --global user.name "AkhileshNS"
-          git add -A
-          git commit -m "Added data.json"
       - uses: akhileshns/heroku-deploy@v4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}

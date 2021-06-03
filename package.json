@@ -2,9 +2,9 @@
   "name": "heroku-deploy",
   "version": "4.0.0",
   "description": "A simple github action that dynamically deploys an app to heroku",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && ncc build --source-map --license licenses.txt",
+    "build": "tsc && ncc build lib/index.js -s -m --license licenses.txt",
     "test": "node scripts/test",
     "test-action": "node scripts/test-action",
     "setup": "node scripts/setup",
