@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import core from '@actions/core';
+import * as core from '@actions/core';
 import { IHeroku } from '../types';
 import { ansi_colors } from '../util';
 

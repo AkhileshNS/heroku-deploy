@@ -1,5 +1,5 @@
 
-import core from '@actions/core';
+import * as core from '@actions/core';
 import { IHeroku } from '../types';
 import { ansi_colors } from '../util';
 import p from 'phin';

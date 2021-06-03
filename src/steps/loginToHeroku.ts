@@ -1,6 +1,6 @@
 import { ansi_colors } from '../util';
 import { IHeroku } from '../types';
-import core from '@actions/core';
+import * as core from '@actions/core';
 import { execSync } from 'child_process';
 
 const createCatFile = ({ email, api_key }: IHeroku) => `cat >~/.netrc <<EOF

@@ -1,5 +1,5 @@
 
-import core from '@actions/core';
+import * as core from '@actions/core';
 import path from 'path';
 import fs from 'fs';
 import { IHeroku } from '../types';
