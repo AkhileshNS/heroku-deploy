@@ -5,3 +5,7 @@ export const ansi_colors = {
   blue: '\u001b[94m',
   red: '\u001b[91m'
 };
+
+export const error_outputs = {
+  SKIPPED_WRONG_BRANCH: "Pushed to branch other than [main, master], skipping build".toLowerCase()
+}

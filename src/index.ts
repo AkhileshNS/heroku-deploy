@@ -14,6 +14,11 @@ import * as steps from './steps';
     steps.addConfigVars(heroku) &&
     steps.deploy(heroku) &&
     (await steps.performHealthCheck(heroku))
+
+    core.setOutput(
+      "status",
+      "Successfully deployed heroku app from branch " + heroku.branch
+    );
   } catch (error) {
     core.setFailed(error);
   }

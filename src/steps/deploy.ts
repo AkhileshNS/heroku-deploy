@@ -2,7 +2,7 @@
 import * as core from '@actions/core';
 import { execSync } from 'child_process';
 import { IHeroku } from '../types';
-import { ansi_colors } from '../util';
+import { ansi_colors, error_outputs } from '../util';
 
 export const deployDocker = (heroku: IHeroku) => {
   if (heroku.usedocker) {
@@ -39,7 +39,13 @@ export const deployGit = (heroku: IHeroku, shouldThrowError = false) => {
     ? `\`git subtree split --prefix=${heroku.appdir} ${heroku.branch}\``
     : heroku.branch
   try {
-    execSync(`git push ${force} heroku ${finalBranch}:refs/head/main`, { maxBuffer: 104857600 });
+    const output = execSync(`git push ${force} heroku ${finalBranch}:refs/head/main`, { maxBuffer: 104857600 }).toString();
+    if (output.toLowerCase().includes(error_outputs.SKIPPED_WRONG_BRANCH)) {
+      throw new Error(`
+        Unable to deploy code because the deployed branch is not 'main' or 'master' 
+        (Heroku only allows this branch to be deployed)
+      `);
+    }
   } catch (err) {
     if (shouldThrowError) {
       throw err;

@@ -18,7 +18,7 @@ inputs:
     required: false
   branch:
     description: "The branch that you would like to deploy to Heroku"
-    default: "HEAD"
+    default: "main"
     required: false
   dontuseforce:
     description: "Set this to true if you don't want to use --force when switching branches"
