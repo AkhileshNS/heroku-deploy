@@ -29,6 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
+    "dotenv": "^10.0.0",
     "phin": "^3.5.0"
   },
   "devDependencies": {

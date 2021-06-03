@@ -15,10 +15,6 @@ import * as steps from './steps';
     steps.deploy(heroku) &&
     (await steps.performHealthCheck(heroku))
   } catch (error) {
-    core.setFailed(
-      "stderr" in error 
-      ? error.stderr.toString() 
-      : error.message.toString()
-    );
+    core.setFailed(error);
   }
 })();

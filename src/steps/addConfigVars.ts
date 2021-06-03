@@ -5,6 +5,7 @@ import fs from 'fs';
 import { IHeroku } from '../types';
 import { ansi_colors } from '../util';
 import { execSync } from 'child_process';
+import {parse} from 'dotenv';
 
 const addVarsFromEnv = (vars: string[]): string[] => {
   const res = [...vars];
@@ -19,7 +20,7 @@ const addVarsFromEnv = (vars: string[]): string[] => {
 const addVarsFromEnvFile = (heroku: IHeroku, vars: string[]): string[] => {
   if (heroku.env_file) {
     const env = fs.readFileSync(path.join(heroku.appdir, heroku.env_file), "utf8");
-    const variables = require("dotenv").parse(env);
+    const variables = parse(env);
     const newVars: string[] = [];
     for (let key in variables) {
       newVars.push(key + "=" + variables[key]);
