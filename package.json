@@ -4,7 +4,7 @@
   "description": "A simple github action that dynamically deploys an app to heroku",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && ncc build lib/index.js -m --license licenses.txt",
+    "build": "ncc build src/index.ts -m --license licenses.txt",
     "test": "node scripts/test",
     "test-action": "node scripts/test-action",
     "setup": "node scripts/setup",

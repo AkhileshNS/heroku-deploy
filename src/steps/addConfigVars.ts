@@ -20,7 +20,7 @@ const addVarsFromEnvFile = (heroku: IHeroku, vars: string[]): string[] => {
   if (heroku.env_file) {
     const env = fs.readFileSync(path.join(heroku.appdir, heroku.env_file), "utf8");
     const variables = require("dotenv").parse(env);
-    const newVars = [];
+    const newVars: string[] = [];
     for (let key in variables) {
       newVars.push(key + "=" + variables[key]);
     }

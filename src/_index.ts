@@ -37,7 +37,7 @@ const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack }:
 };
 
 const addConfig = ({ app_name, env_file, appdir }: IHeroku) => {
-  let configVars = [];
+  let configVars: string[] = [];
   for (let key in process.env) {
     if (key.startsWith("HD_")) {
       configVars.push(key.substring(3) + "='" + process.env[key] + "'");
@@ -46,7 +46,7 @@ const addConfig = ({ app_name, env_file, appdir }: IHeroku) => {
   if (env_file) {
     const env = fs.readFileSync(path.join(appdir, env_file), "utf8");
     const variables = require("dotenv").parse(env);
-    const newVars = [];
+    const newVars: string[] = [];
     for (let key in variables) {
       newVars.push(key + "=" + variables[key]);
     }
