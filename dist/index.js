@@ -2,7 +2,434 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 822:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __importDefault(__nccwpck_require__(186));
+const steps = __importStar(__nccwpck_require__(561));
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const heroku = steps.getHerokuConfig();
+        // Pipeline
+        steps.loginToHeroku(heroku) &&
+            steps.justLogin(heroku) &&
+            steps.configureGit(heroku) &&
+            steps.createProcfile(heroku) &&
+            steps.addRemote(heroku) &&
+            steps.addConfigVars(heroku) &&
+            steps.deploy(heroku) &&
+            (yield steps.performHealthCheck(heroku));
+    }
+    catch (error) {
+        core_1.default.setFailed("stderr" in error
+            ? error.stderr.toString()
+            : error.message.toString());
+    }
+}))();
+
+
+/***/ }),
+
+/***/ 279:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.addConfigVars = void 0;
+const core_1 = __importDefault(__nccwpck_require__(186));
+const path_1 = __importDefault(__nccwpck_require__(622));
+const fs_1 = __importDefault(__nccwpck_require__(747));
+const util_1 = __nccwpck_require__(24);
+const child_process_1 = __nccwpck_require__(129);
+const addVarsFromEnv = (vars) => {
+    const res = [...vars];
+    for (let key in process.env) {
+        if (key.startsWith("HD_")) {
+            res.push(key.substring(3) + "='" + process.env[key] + "'");
+        }
+    }
+    return res;
+};
+const addVarsFromEnvFile = (heroku, vars) => {
+    if (heroku.env_file) {
+        const env = fs_1.default.readFileSync(path_1.default.join(heroku.appdir, heroku.env_file), "utf8");
+        const variables = __nccwpck_require__(153).parse(env);
+        const newVars = [];
+        for (let key in variables) {
+            newVars.push(key + "=" + variables[key]);
+        }
+        return [...vars, ...newVars];
+    }
+    return vars;
+};
+const addConfigVars = (heroku) => {
+    core_1.default.debug(util_1.ansi_colors.cyan + "STEP: Adding Configuration Variables from env and envfile");
+    const envVars = addVarsFromEnv([]);
+    const configVars = addVarsFromEnvFile(heroku, envVars);
+    if (configVars.length !== 0) {
+        child_process_1.execSync(`heroku config:set --app=${heroku.app_name} ${configVars.join(" ")}`);
+    }
+    core_1.default.info(util_1.ansi_colors.green + "STEP: Adding Configuration Variables from env and envfile - Success");
+    return true;
+};
+exports.addConfigVars = addConfigVars;
+
+
+/***/ }),
+
+/***/ 817:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.addRemote = void 0;
+const core_1 = __importDefault(__nccwpck_require__(186));
+const child_process_1 = __nccwpck_require__(129);
+const util_1 = __nccwpck_require__(24);
+const addRemote = (heroku) => {
+    core_1.default.debug(util_1.ansi_colors.cyan + "STEP: Adding Remote");
+    try {
+        child_process_1.execSync("heroku git:remote --app " + heroku.app_name);
+        core_1.default.debug("Added git remote heroku");
+    }
+    catch (err) {
+        if (heroku.dontautocreate) {
+            throw err;
+        }
+        child_process_1.execSync("heroku create " +
+            heroku.app_name +
+            (heroku.buildpack ? " --buildpack " + heroku.buildpack : "") +
+            (heroku.region ? " --region " + heroku.region : "") +
+            (heroku.stack ? " --stack " + heroku.stack : "") +
+            (heroku.team ? " --team " + heroku.team : ""));
+    }
+    core_1.default.info(util_1.ansi_colors.green + "STEP: Adding Remote - Success");
+    return true;
+};
+exports.addRemote = addRemote;
+
+
+/***/ }),
+
+/***/ 151:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.configureGit = void 0;
+const core_1 = __importDefault(__nccwpck_require__(186));
+const child_process_1 = __nccwpck_require__(129);
+const util_1 = __nccwpck_require__(24);
+const configureUserAndCommit = (heroku) => {
+    child_process_1.execSync(`git config user.name "Heroku-Deploy"`);
+    child_process_1.execSync(`git config user.email "${heroku.email}"`);
+    if (child_process_1.execSync("git status --porcelain").toString().trim()) {
+        child_process_1.execSync('git add -A && git commit -m "Commited changes from previous actions"');
+    }
+    return true;
+};
+const unshallowRepo = (heroku) => {
+    if (heroku.usedocker) {
+        return true;
+    }
+    if (child_process_1.execSync("git rev-parse --is-shallow-repository").toString().trim() === "true") {
+        child_process_1.execSync("git fetch --prune --unshallow");
+    }
+    return true;
+};
+const configureGit = (heroku) => {
+    core_1.default.debug(util_1.ansi_colors.cyan + "STEP: Configuring git");
+    configureUserAndCommit(heroku) &&
+        unshallowRepo(heroku);
+    core_1.default.info(util_1.ansi_colors.green + "STEP: Configuring git - Success");
+    return true;
+};
+exports.configureGit = configureGit;
+
+
+/***/ }),
+
+/***/ 946:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createProcfile = void 0;
+const child_process_1 = __nccwpck_require__(129);
+const fs_1 = __importDefault(__nccwpck_require__(747));
+const path_1 = __importDefault(__nccwpck_require__(622));
+const core_1 = __importDefault(__nccwpck_require__(186));
+const util_1 = __nccwpck_require__(24);
+const createProcfile = (heroku) => {
+    if (heroku.procfile) {
+        core_1.default.debug(util_1.ansi_colors.cyan + "STEP: Creating Procfile");
+        fs_1.default.writeFileSync(path_1.default.join(heroku.appdir, "Procfile"), heroku.procfile);
+        child_process_1.execSync(`git add -A && git commit -m "Added Procfile"`);
+        core_1.default.info(util_1.ansi_colors.green + "STEP: Creating Procfile - Success");
+    }
+    return true;
+};
+exports.createProcfile = createProcfile;
+
+
+/***/ }),
+
+/***/ 241:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.deploy = exports.deployGit = exports.fixRemoteBranch = exports.deployDocker = void 0;
+const core_1 = __importDefault(__nccwpck_require__(186));
+const child_process_1 = __nccwpck_require__(129);
+const util_1 = __nccwpck_require__(24);
+const deployDocker = (heroku) => {
+    if (heroku.usedocker) {
+        child_process_1.execSync(`heroku container:push ${heroku.dockerHerokuProcessType} --app ${heroku.app_name} ${heroku.dockerBuildArgs}`, heroku.appdir ? { cwd: heroku.appdir } : undefined);
+        child_process_1.execSync(`heroku container:release ${heroku.dockerHerokuProcessType} --app ${heroku.app_name}`, heroku.appdir ? { cwd: heroku.appdir } : undefined);
+        return false;
+    }
+    return true;
+};
+exports.deployDocker = deployDocker;
+const fixRemoteBranch = (heroku) => {
+    let remote_branch = child_process_1.execSync("git remote show heroku | grep 'HEAD' | cut -d':' -f2 | sed -e 's/^ *//g' -e 's/ *$//g'")
+        .toString()
+        .trim();
+    if (remote_branch === "master") {
+        child_process_1.execSync("heroku plugins:install heroku-repo");
+        child_process_1.execSync("heroku repo:reset -a " + heroku.app_name);
+    }
+    return true;
+};
+exports.fixRemoteBranch = fixRemoteBranch;
+const deployGit = (heroku, shouldThrowError = false) => {
+    const force = !heroku.dontuseforce ? "--force" : "";
+    const finalBranch = heroku.appdir
+        ? `\`git subtree split --prefix=${heroku.appdir} ${heroku.branch}\``
+        : heroku.branch;
+    try {
+        child_process_1.execSync(`git push ${force} heroku ${finalBranch}:refs/head/main`, { maxBuffer: 104857600 });
+    }
+    catch (err) {
+        if (shouldThrowError) {
+            throw err;
+        }
+        else {
+            core_1.default.error(util_1.ansi_colors.red + ("stderr" in err
+                ? err.stderr.toString()
+                : err.message.toString()));
+            return true;
+        }
+    }
+    return false;
+};
+exports.deployGit = deployGit;
+const deploy = (heroku) => {
+    core_1.default.debug(util_1.ansi_colors.cyan + "STEP: Deploying");
+    exports.deployDocker(heroku) &&
+        exports.fixRemoteBranch(heroku) &&
+        exports.deployGit(Object.assign(Object.assign({}, heroku), { dontuseforce: false })) &&
+        exports.deployGit(heroku, true);
+    core_1.default.info(util_1.ansi_colors.green + "STEP: Deploying - Success");
+    return true;
+};
+exports.deploy = deploy;
+
+
+/***/ }),
+
+/***/ 546:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getHerokuConfig = void 0;
+const core_1 = __importDefault(__nccwpck_require__(186));
+const util_1 = __nccwpck_require__(24);
+const formatAppdir = (appdir) => appdir[0] === "." && appdir[1] === "/"
+    ? appdir.slice(2)
+    : appdir[0] === "/"
+        ? appdir.slice(1)
+        : appdir;
+const formatDockerBuildArgs = (dockerBuildArgs) => {
+    const res = dockerBuildArgs
+        .split("\n")
+        .map((arg) => `${arg}="${process.env[arg]}"`)
+        .join(",");
+    return res ? "--arg " + res : "";
+};
+const getHerokuConfig = () => {
+    core_1.default.debug(util_1.ansi_colors.cyan + "STEP: Getting Heroku Config");
+    const heroku = {
+        api_key: core_1.default.getInput("heroku_api_key"),
+        email: core_1.default.getInput("heroku_email"),
+        app_name: core_1.default.getInput("heroku_app_name"),
+        buildpack: core_1.default.getInput("buildpack"),
+        branch: core_1.default.getInput("branch"),
+        dontuseforce: core_1.default.getInput("dontuseforce") === "false" ? false : true,
+        dontautocreate: core_1.default.getInput("dontautocreate") === "false" ? false : true,
+        usedocker: core_1.default.getInput("usedocker") === "false" ? false : true,
+        dockerHerokuProcessType: core_1.default.getInput("docker_heroku_process_type"),
+        dockerBuildArgs: formatDockerBuildArgs(core_1.default.getInput("docker_build_args")),
+        appdir: formatAppdir(core_1.default.getInput("appdir")),
+        healthcheck: core_1.default.getInput("healthcheck"),
+        checkstring: core_1.default.getInput("checkstring"),
+        delay: parseInt(core_1.default.getInput("delay")),
+        procfile: core_1.default.getInput("procfile"),
+        rollbackonhealthcheckfailed: core_1.default.getInput("rollbackonhealthcheckfailed") === "false" ? false : true,
+        env_file: core_1.default.getInput("env_file"),
+        justlogin: core_1.default.getInput("justlogin") === "false" ? false : true,
+        region: core_1.default.getInput("region"),
+        stack: core_1.default.getInput("stack"),
+        team: core_1.default.getInput("team"),
+    };
+    core_1.default.info(util_1.ansi_colors.green + "STEP: Getting Heroku Config - Success");
+    return heroku;
+};
+exports.getHerokuConfig = getHerokuConfig;
+
+
+/***/ }),
+
+/***/ 561:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.performHealthCheck = exports.deploy = exports.addConfigVars = exports.addRemote = exports.createProcfile = exports.configureGit = exports.loginToHeroku = exports.justLogin = exports.getHerokuConfig = void 0;
+var getHerokuConfig_1 = __nccwpck_require__(546);
+Object.defineProperty(exports, "getHerokuConfig", ({ enumerable: true, get: function () { return getHerokuConfig_1.getHerokuConfig; } }));
+var justLogin_1 = __nccwpck_require__(580);
+Object.defineProperty(exports, "justLogin", ({ enumerable: true, get: function () { return justLogin_1.justLogin; } }));
+var loginToHeroku_1 = __nccwpck_require__(460);
+Object.defineProperty(exports, "loginToHeroku", ({ enumerable: true, get: function () { return loginToHeroku_1.loginToHeroku; } }));
+var configureGit_1 = __nccwpck_require__(151);
+Object.defineProperty(exports, "configureGit", ({ enumerable: true, get: function () { return configureGit_1.configureGit; } }));
+var createProcfile_1 = __nccwpck_require__(946);
+Object.defineProperty(exports, "createProcfile", ({ enumerable: true, get: function () { return createProcfile_1.createProcfile; } }));
+var addRemote_1 = __nccwpck_require__(817);
+Object.defineProperty(exports, "addRemote", ({ enumerable: true, get: function () { return addRemote_1.addRemote; } }));
+var addConfigVars_1 = __nccwpck_require__(279);
+Object.defineProperty(exports, "addConfigVars", ({ enumerable: true, get: function () { return addConfigVars_1.addConfigVars; } }));
+var deploy_1 = __nccwpck_require__(241);
+Object.defineProperty(exports, "deploy", ({ enumerable: true, get: function () { return deploy_1.deploy; } }));
+var performHealthCheck_1 = __nccwpck_require__(283);
+Object.defineProperty(exports, "performHealthCheck", ({ enumerable: true, get: function () { return performHealthCheck_1.performHealthCheck; } }));
+
+
+/***/ }),
+
+/***/ 580:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.justLogin = void 0;
+// IF justlogin = true, then return false and stop the pipeline
+// else return true and continue the pipeline
+const justLogin = (heroku) => !heroku.justlogin;
+exports.justLogin = justLogin;
+
+
+/***/ }),
+
+/***/ 460:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.loginToHeroku = void 0;
+const util_1 = __nccwpck_require__(24);
+const core_1 = __importDefault(__nccwpck_require__(186));
+const child_process_1 = __nccwpck_require__(129);
+const createCatFile = ({ email, api_key }) => `cat >~/.netrc <<EOF
+machine api.heroku.com
+    login ${email}
+    password ${api_key}
+machine git.heroku.com
+    login ${email}
+    password ${api_key}
+EOF`;
+const loginToHeroku = (heroku) => {
+    core_1.default.debug(util_1.ansi_colors.cyan + "STEP: Login to Heroku");
+    child_process_1.execSync(createCatFile(heroku));
+    if (heroku.usedocker) {
+        child_process_1.execSync("heroku container:login");
+    }
+    core_1.default.info(util_1.ansi_colors.green + "STEP: Login to Heroku - Success");
+    return true;
+};
+exports.loginToHeroku = loginToHeroku;
+
+
+/***/ }),
+
+/***/ 283:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -15,216 +442,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const p = __nccwpck_require__(384);
-const core = __nccwpck_require__(186);
-const { execSync } = __nccwpck_require__(129);
-const fs = __nccwpck_require__(747);
-const path = __nccwpck_require__(622);
-// Support Functions
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const createCatFile = ({ email, api_key }) => `cat >~/.netrc <<EOF
-machine api.heroku.com
-    login ${email}
-    password ${api_key}
-machine git.heroku.com
-    login ${email}
-    password ${api_key}
-EOF`;
-const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack }) => {
-    try {
-        execSync("heroku git:remote --app " + app_name);
-        console.log("Added git remote heroku");
-    }
-    catch (err) {
-        if (dontautocreate)
-            throw err;
-        execSync("heroku create " +
-            app_name +
-            (buildpack ? " --buildpack " + buildpack : "") +
-            (region ? " --region " + region : "") +
-            (stack ? " --stack " + stack : "") +
-            (team ? " --team " + team : ""));
-    }
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const addConfig = ({ app_name, env_file, appdir }) => {
-    let configVars = [];
-    for (let key in process.env) {
-        if (key.startsWith("HD_")) {
-            configVars.push(key.substring(3) + "='" + process.env[key] + "'");
-        }
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.performHealthCheck = void 0;
+const core_1 = __importDefault(__nccwpck_require__(186));
+const util_1 = __nccwpck_require__(24);
+const phin_1 = __importDefault(__nccwpck_require__(384));
+const child_process_1 = __nccwpck_require__(129);
+const delay = (heroku) => __awaiter(void 0, void 0, void 0, function* () {
+    if (typeof heroku.delay === "number" && heroku.delay !== NaN) {
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        yield sleep(heroku.delay * 1000);
     }
-    if (env_file) {
-        const env = fs.readFileSync(path.join(appdir, env_file), "utf8");
-        const variables = __nccwpck_require__(153).parse(env);
-        const newVars = [];
-        for (let key in variables) {
-            newVars.push(key + "=" + variables[key]);
-        }
-        configVars = [...configVars, ...newVars];
+    return true;
+});
+const healthcheck = (heroku) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield phin_1.default(heroku.healthcheck);
+    if (res.statusCode !== 200) {
+        core_1.default.error(`${util_1.ansi_colors.red}Status code of network request is not 200: Status code - ${res.statusCode}`);
+        return true;
     }
-    if (configVars.length !== 0) {
-        execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
+    if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
+        core_1.default.error(util_1.ansi_colors.red + "Failed to match the checkstring");
+        return true;
     }
-};
-const createProcfile = ({ procfile, appdir }) => {
-    if (procfile) {
-        fs.writeFileSync(path.join(appdir, "Procfile"), procfile);
-        execSync(`git add -A && git commit -m "Added Procfile"`);
-        console.log("Written Procfile with custom configuration");
-    }
-};
-const deploy = ({ dontuseforce, app_name, branch, usedocker, dockerHerokuProcessType, dockerBuildArgs, appdir, }) => {
-    const force = !dontuseforce ? "--force" : "";
-    if (usedocker) {
-        execSync(`heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`, appdir ? { cwd: appdir } : null);
-        execSync(`heroku container:release ${dockerHerokuProcessType} --app ${app_name}`, appdir ? { cwd: appdir } : null);
+    core_1.default.info(res.body.toString());
+    return false;
+});
+const rollback = (heroku) => {
+    if (heroku.rollbackonhealthcheckfailed) {
+        child_process_1.execSync(`heroku rollback --app ${heroku.app_name}`, heroku.appdir ? { cwd: heroku.appdir } : undefined);
+        throw new Error("Health Check Failed. Error deploying Server. Deployment has been rolled back. Please check your logs on Heroku to try and diagnose the problem");
     }
     else {
-        let remote_branch = execSync("git remote show heroku | grep 'HEAD' | cut -d':' -f2 | sed -e 's/^ *//g' -e 's/ *$//g'")
-            .toString()
-            .trim();
-        if (remote_branch === "master") {
-            execSync("heroku plugins:install heroku-repo");
-            execSync("heroku repo:reset -a " + app_name);
-        }
-        if (appdir === "") {
-            execSync(`git push heroku ${branch}:refs/heads/main ${force}`, {
-                maxBuffer: 104857600,
-            });
-        }
-        else {
-            execSync(`git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/main`, { maxBuffer: 104857600 });
-        }
+        throw new Error("Health Check Failed. Error deploying Server. Please check your logs on Heroku to try and diagnose the problem");
     }
 };
-const healthcheckFailed = ({ rollbackonhealthcheckfailed, app_name, appdir, }) => {
-    if (rollbackonhealthcheckfailed) {
-        execSync(`heroku rollback --app ${app_name}`, appdir ? { cwd: appdir } : null);
-        core.setFailed("Health Check Failed. Error deploying Server. Deployment has been rolled back. Please check your logs on Heroku to try and diagnose the problem");
+const performHealthCheck = (heroku) => __awaiter(void 0, void 0, void 0, function* () {
+    core_1.default.debug(util_1.ansi_colors.cyan + "STEP: Performing HealthCheck");
+    if (heroku.healthcheck) {
+        (yield delay(heroku)) &&
+            (yield healthcheck(heroku)) &&
+            rollback(heroku);
     }
-    else {
-        core.setFailed("Health Check Failed. Error deploying Server. Please check your logs on Heroku to try and diagnose the problem");
-    }
+    core_1.default.info(util_1.ansi_colors.green + "STEP: Performing HealthCheck - Success");
+    return true;
+});
+exports.performHealthCheck = performHealthCheck;
+
+
+/***/ }),
+
+/***/ 24:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ansi_colors = void 0;
+exports.ansi_colors = {
+    green: '\u001b[31m',
+    cyan: '\u001b[36m',
+    magenta: '\u001b[35m',
+    blue: '\u001b[94m',
+    red: '\u001b[91m'
 };
-// Input Variables
-let heroku = {
-    api_key: core.getInput("heroku_api_key"),
-    email: core.getInput("heroku_email"),
-    app_name: core.getInput("heroku_app_name"),
-    buildpack: core.getInput("buildpack"),
-    branch: core.getInput("branch"),
-    dontuseforce: core.getInput("dontuseforce") === "false" ? false : true,
-    dontautocreate: core.getInput("dontautocreate") === "false" ? false : true,
-    usedocker: core.getInput("usedocker") === "false" ? false : true,
-    dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
-    dockerBuildArgs: core.getInput("docker_build_args"),
-    appdir: core.getInput("appdir"),
-    healthcheck: core.getInput("healthcheck"),
-    checkstring: core.getInput("checkstring"),
-    delay: parseInt(core.getInput("delay")),
-    procfile: core.getInput("procfile"),
-    rollbackonhealthcheckfailed: core.getInput("rollbackonhealthcheckfailed") === "false" ? false : true,
-    env_file: core.getInput("env_file"),
-    justlogin: core.getInput("justlogin") === "false" ? false : true,
-    region: core.getInput("region"),
-    stack: core.getInput("stack"),
-    team: core.getInput("team"),
-};
-// Formatting
-if (heroku.appdir) {
-    heroku.appdir =
-        heroku.appdir[0] === "." && heroku.appdir[1] === "/"
-            ? heroku.appdir.slice(2)
-            : heroku.appdir[0] === "/"
-                ? heroku.appdir.slice(1)
-                : heroku.appdir;
-}
-// Collate docker build args into arg list
-if (heroku.dockerBuildArgs) {
-    heroku.dockerBuildArgs = heroku.dockerBuildArgs
-        .split("\n")
-        .map((arg) => `${arg}="${process.env[arg]}"`)
-        .join(",");
-    heroku.dockerBuildArgs = heroku.dockerBuildArgs
-        ? `--arg ${heroku.dockerBuildArgs}`
-        : "";
-}
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    // Program logic
-    try {
-        // Just Login
-        if (heroku.justlogin) {
-            execSync(createCatFile(heroku));
-            console.log("Created and wrote to ~/.netrc");
-            return;
-        }
-        execSync(`git config user.name "Heroku-Deploy"`);
-        execSync(`git config user.email "${heroku.email}"`);
-        const status = execSync("git status --porcelain").toString().trim();
-        if (status) {
-            execSync('git add -A && git commit -m "Commited changes from previous actions"');
-        }
-        // Check if using Docker
-        if (!heroku.usedocker) {
-            // Check if Repo clone is shallow
-            const isShallow = execSync("git rev-parse --is-shallow-repository").toString();
-            // If the Repo clone is shallow, make it unshallow
-            if (isShallow === "true\n") {
-                execSync("git fetch --prune --unshallow");
-            }
-        }
-        execSync(createCatFile(heroku));
-        console.log("Created and wrote to ~/.netrc");
-        createProcfile(heroku);
-        if (heroku.usedocker) {
-            execSync("heroku container:login");
-        }
-        console.log("Successfully logged into heroku");
-        addRemote(heroku);
-        addConfig(heroku);
-        try {
-            deploy(Object.assign(Object.assign({}, heroku), { dontuseforce: true }));
-        }
-        catch (err) {
-            console.error(`
-            Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. 
-            (If you want to avoid this, set dontuseforce to 1 in with: of .github/workflows/action.yml. 
-            Specifically, the error was: ${err}
-        `);
-            deploy(heroku);
-        }
-        if (heroku.healthcheck) {
-            if (typeof heroku.delay === "number" && heroku.delay !== NaN) {
-                yield sleep(heroku.delay * 1000);
-            }
-            try {
-                const res = yield p(heroku.healthcheck);
-                if (res.statusCode !== 200) {
-                    throw new Error("Status code of network request is not 200: Status code - " +
-                        res.statusCode);
-                }
-                if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
-                    throw new Error("Failed to match the checkstring");
-                }
-                console.log(res.body.toString());
-            }
-            catch (err) {
-                console.log(err.message);
-                healthcheckFailed(heroku);
-            }
-        }
-        core.setOutput("status", "Successfully deployed heroku app from branch " + heroku.branch);
-    }
-    catch (err) {
-        if (heroku.dontautocreate &&
-            err.toString().includes("Couldn't find that app")) {
-            core.setOutput("status", "Skipped deploy to heroku app from branch " + heroku.branch);
-        }
-        else {
-            core.setFailed(err.toString());
-        }
-    }
-}))();
 
 
 /***/ }),

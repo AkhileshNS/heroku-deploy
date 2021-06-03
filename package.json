@@ -9,7 +9,8 @@
     "test-action": "node scripts/test-action",
     "setup": "node scripts/setup",
     "start": "npm run build && node dist/index",
-    "add-step": "node scripts/add-step"
+    "add-step": "node scripts/add-step",
+    "local-test": "act --secret-file my.secrets -P ubuntu-latest=nektos/act-environments-ubuntu:18.04 -j local-deploy-test-1 -v -b"
   },
   "repository": {
     "type": "git",
