@@ -20,6 +20,7 @@ const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack })
   try {
     execSync("heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
+    execSync("heroku stack:set " + stack);
   } catch (err) {
     if (dontautocreate) throw err;
 
