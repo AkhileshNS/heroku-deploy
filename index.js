@@ -182,6 +182,9 @@ if (heroku.dockerBuildArgs) {
       execSync(createCatFile(heroku));
       console.log("Created and wrote to ~/.netrc");
 
+      if (heroku.usedocker) {
+        execSync("heroku container:login");
+      }
       return;
     }
 
