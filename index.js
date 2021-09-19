@@ -70,12 +70,14 @@ const deploy = ({
   usedocker,
   dockerHerokuProcessType,
   dockerBuildArgs,
+  dockerHerokuPushRecursive,
   appdir,
 }) => {
   const force = !dontuseforce ? "--force" : "";
   if (usedocker) {
+    const push_recursive = dockerHerokuPushRecursive ? "--recursive" : "";
     execSync(
-      `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
+      `heroku container:push ${push_recursive} ${dockerHerokuProcessType}  --app ${app_name} ${dockerBuildArgs}`,
       appdir ? { cwd: appdir } : null
     );
     execSync(
@@ -138,6 +140,7 @@ let heroku = {
   dontautocreate: core.getInput("dontautocreate") === "false" ? false : true,
   usedocker: core.getInput("usedocker") === "false" ? false : true,
   dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
+  dockerHerokuPushRecursive: core.getInput("docker_heroku_push_recursive") === "false" ? false : true,
   dockerBuildArgs: core.getInput("docker_build_args"),
   appdir: core.getInput("appdir"),
   healthcheck: core.getInput("healthcheck"),
