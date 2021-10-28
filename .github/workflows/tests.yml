@@ -1,0 +1,19 @@
+name: Tests
+
+on:
+  push:
+    branches: [version-4]
+
+jobs:
+  deploy-test-1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@version-4
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "akhileshns-hd-test-1"
+          heroku_email: "nsakhilesh02@gmail.com"
+          appdir: "tests/test-1"
+          healthcheck: "https://akhileshns-hd-test-1.herokuapp.com/"
+          env_file: ".env"

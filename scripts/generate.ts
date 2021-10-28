@@ -62,7 +62,7 @@ const convertPreActionsToActions = (preActions: IPreActions): IActions => ({
     image: "Dockerfile",
     env: Object.keys(preActions).reduce((running, current) => ({
       ...running, 
-      [current]: "${{ inputs." + current + " }}"
+      ["ga_" + current]: "${{ inputs." + current + " }}"
     }), {})
   }
 }); 
@@ -75,11 +75,11 @@ const convertPreActionsToActions = (preActions: IPreActions): IActions => ({
     const writePath = join(process.cwd(), "action.yml");
 
     // PIPELINE
-    const preActionsRaw = await read(readPath, "utf-8");
-    const preActions: IPreActions = parse(preActionsRaw);
-    const actions: IActions = convertPreActionsToActions(preActions);
-    const actionsRaw = stringify(actions);
-    await write(writePath, actionsRaw, "utf-8");
+    /* STEP */ const preActionsRaw = await read(readPath, "utf-8");
+    /* STEP */ const preActions: IPreActions = parse(preActionsRaw);
+    /* STEP */ const actions: IActions = convertPreActionsToActions(preActions);
+    /* STEP */ const actionsRaw = stringify(actions);
+    /* STEP */ await write(writePath, actionsRaw, "utf-8");
   } catch (err) {
     console.log(err);
   }
