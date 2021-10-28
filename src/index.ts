@@ -7,6 +7,6 @@ const asyncExec = promisify(exec);
   try {
     console.log((await asyncExec("heroku --version")).stdout);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 })()
