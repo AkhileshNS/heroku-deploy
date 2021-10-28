@@ -19,33 +19,33 @@ inputs:
     required: false
   branch:
     description: The branch that you would like to deploy to Heroku
-    default: main
     required: false
+    default: main
   dontuseforce:
     description: Set this to true if you don't want to use --force when switching branches
-    default: "false"
     required: false
+    default: "false"
   dontautocreate:
     description: Set this to true if you don't want to automatically create the Heroku app
-    default: "false"
     required: false
+    default: "false"
   usedocker:
     description: Will deploy using Dockerfile in project root.
-    default: "false"
     required: false
+    default: "false"
   docker_heroku_process_type:
     description: Type of heroku process (web, worker, etc). This option only makes
       sense when usedocker enabled
-    default: web
     required: false
+    default: web
   docker_build_args:
     description: A list of args to pass into the Docker build. This option only
       makes sense when usedocker enabled
     required: false
   appdir:
     description: Set if your app is located in a subdirectory.
-    default: ""
     required: false
+    default: ""
   healthcheck:
     description: A URL to which a healthcheck is performed (checks for 200 request)
     required: false
@@ -80,7 +80,7 @@ inputs:
     required: false
     default: ""
   stack:
-    description: "Set stack of your heroku app if you need to change.Default : heroku-20"
+    description: Set stack of your heroku app if you need to change.Default heroku-20
     required: false
     default: ""
   team:
