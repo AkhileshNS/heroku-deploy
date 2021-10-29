@@ -1,5 +1,7 @@
 import { IHeroku } from '../types';
+import * as logger from '../logger.util';
 
+// HELPER FUNCTIONS
 const formatAppdir = (appdir: string) => 
   appdir[0] === "." && appdir[1] === "/"
   ? appdir.slice(2)
@@ -15,9 +17,13 @@ const formatDockerBuildArgs = (dockerBuildArgs: string) => {
   return res ? "--arg " + res : ""
 }
 
+// RUN
 export const getHerokuConfig = (): IHeroku => {
+  // CONSTANTS
+  const ACTION = "Getting Heroku Config";
+
   try {
-    console.log("⌛ STEP: Getting Heroku Config")
+    logger.running(ACTION);
 
     const heroku = {
       api_key: process.env["ga_heroku_api_key"],
@@ -44,10 +50,10 @@ export const getHerokuConfig = (): IHeroku => {
       team: process.env["ga_team"],
     };
 
-    console.log("✔️ STEP: Getting Heroku Config - Success")
+    logger.success(ACTION);
     return heroku;
   } catch (err) {
-    console.log("❌ STEP: Getting Heroku Config - Failure")
+    logger.failure(ACTION);
     throw err;
   }
 }

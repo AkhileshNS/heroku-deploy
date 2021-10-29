@@ -19,75 +19,75 @@ inputs:
     required: false
   branch:
     description: The branch that you would like to deploy to Heroku
-    required: false
     default: main
+    required: false
   dontuseforce:
     description: Set this to true if you don't want to use --force when switching branches
-    required: false
     default: "false"
+    required: false
   dontautocreate:
     description: Set this to true if you don't want to automatically create the Heroku app
-    required: false
     default: "false"
+    required: false
   usedocker:
     description: Will deploy using Dockerfile in project root.
-    required: false
     default: "false"
+    required: false
   docker_heroku_process_type:
     description: Type of heroku process (web, worker, etc). This option only makes
       sense when usedocker enabled
-    required: false
     default: web
+    required: false
   docker_build_args:
     description: A list of args to pass into the Docker build. This option only
       makes sense when usedocker enabled
     required: false
   appdir:
     description: Set if your app is located in a subdirectory.
-    required: false
     default: ""
+    required: false
   healthcheck:
     description: A URL to which a healthcheck is performed (checks for 200 request)
-    required: false
     default: ""
+    required: false
   checkstring:
     description: Value to check for when conducting healthcheck request
-    required: false
     default: ""
+    required: false
   delay:
     description: Time (in seconds) to wait before performing healthcheck
-    required: false
     default: "0"
+    required: false
   procfile:
     description: Contents of the Procfile to save and deploy
-    required: false
     default: ""
+    required: false
   rollbackonhealthcheckfailed:
     description: When set to true this will attempt to rollback to the previous
       release if the healthcheck fails
-    required: false
     default: "false"
+    required: false
   env_file:
     description: Path to an localized env file
-    required: false
     default: ""
+    required: false
   justlogin:
     description: Set to true if you want the action to just login to Heroku and nothing else
-    required: false
     default: "false"
+    required: false
   region:
     description: The region in which you would like to deploy a server
-    required: false
     default: ""
+    required: false
   stack:
     description: Set stack of your heroku app if you need to change.Default heroku-20
-    required: false
     default: ""
+    required: false
   team:
     description: If deploying to an organization, then specify the name of the team
       or organization here
-    required: false
     default: ""
+    required: false
 outputs:
   status:
     description: The Success/Failure of the action

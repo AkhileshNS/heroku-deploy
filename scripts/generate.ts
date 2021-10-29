@@ -9,6 +9,13 @@ const read = promisify(readFile);
 const write = promisify(writeFile);
 
 // TYPES
+interface IPreActionsWithoutRequired {
+  [key: string]: {
+    description: string;
+    default?: string | boolean | number;
+  }
+}
+
 interface IPreActions {
   [key: string]: {
     description: string;
@@ -44,6 +51,15 @@ interface IActions {
 }
 
 // HELPER FUNCTIONS
+const addRequired = (preActions: IPreActionsWithoutRequired, allowedRequired: string[]): IPreActions => 
+  Object.keys(preActions).reduce((running, current) => ({
+    ...running,
+    [current]: {
+      ...preActions[current],
+      required: allowedRequired.includes(current)
+    }
+  }), {} as IPreActions);
+
 const convertPreActionsToActions = (preActions: IPreActions): IActions => ({
   name: "Deploy to Heroku",
   description: "Deploy an app to Heroku",
@@ -73,10 +89,12 @@ const convertPreActionsToActions = (preActions: IPreActions): IActions => ({
     // CONSTANTS
     const readPath = join(process.cwd(), "pre-action.yml");
     const writePath = join(process.cwd(), "action.yml");
+    const allowedRequired = ["heroku_api_key", "heroku_email", "heroku_app_name"];
 
     // PIPELINE
     /* STEP */ const preActionsRaw = await read(readPath, "utf-8");
-    /* STEP */ const preActions: IPreActions = parse(preActionsRaw);
+    /* STEP */ const preActionsWithoutRequired: IPreActionsWithoutRequired = parse(preActionsRaw);
+    /* STEP */ const preActions = addRequired(preActionsWithoutRequired, allowedRequired);
     /* STEP */ const actions: IActions = convertPreActionsToActions(preActions);
     /* STEP */ const actionsRaw = stringify(actions);
     /* STEP */ await write(writePath, actionsRaw, "utf-8");
