@@ -3,3 +3,9 @@ version: "3.9"
 services:
   action:
     build: .
+    environment:
+      - ga_dontuseforce=false
+      - ga_usedocker=false
+      - ga_rollbackonhealthcheckfailed=false
+      - ga_justlogin=false
+      - ga_delay=0

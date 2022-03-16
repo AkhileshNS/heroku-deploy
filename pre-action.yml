@@ -7,6 +7,7 @@ heroku_app_name:
   description: The appname to use for deploying/updating
 buildpack:
   description: An optional buildpack to use when creating the heroku application
+  default: ""
 branch:
   description: The branch that you would like to deploy to Heroku
   default: main
