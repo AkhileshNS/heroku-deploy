@@ -64,15 +64,20 @@ const createProcfile = ({ procfile, appdir }) => {
 };
 
 const getBranchViaRegex = (branch) => {
-  const branchName = execSync(
-    'git branch -a | grep -m 1 "' + branch + '"'
-  ).toString(); 
+  try {
+	  let branchName = execSync(
+	    'git branch -a | grep -m 1 "' + branch + '"'
+	  ).toString(); 
 
-  // return original name on no branch found
-  // error case already present at deployment
-  return !!branchName 
-    ? branchName
-    : branch;
+	  if (!!branchName) {
+	    branchName = branchName.replace('*', '').trim();
+	    return branchName;
+	  }
+  } catch(e) {
+    console.error('No branch found');
+	}
+  
+  return branch;
 }
 
 const deploy = ({
