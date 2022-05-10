@@ -64,6 +64,8 @@ const createProcfile = ({ procfile, appdir }) => {
 };
 
 const getBranchViaRegex = (branch) => {
+  if (!branch) return branch;
+
   try {
 	  let branchName = execSync(
 	    'git branch -a | grep -m 1 "' + branch + '"'
