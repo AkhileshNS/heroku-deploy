@@ -67,18 +67,18 @@ const getBranchViaRegex = (branch) => {
   if (!branch) return branch;
 
   try {
-	  let branchName = execSync(
-	    'git branch -a | grep -m 1 "' + branch + '"'
-	  ).toString(); 
+    let branchName = execSync(
+      'git branch -a | grep -m 1 "' + branch + '"'
+    ).toString(); 
 
-	  if (!!branchName) {
-	    branchName = branchName.replace('*', '').trim();
-	    return branchName;
-	  }
+    if (!!branchName) {
+      branchName = branchName.replace('*', '').trim();
+      return branchName;
+    }
   } catch(e) {
     console.error('No branch found');
-	}
-  
+  }
+
   return branch;
 }
 
