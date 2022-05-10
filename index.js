@@ -63,6 +63,18 @@ const createProcfile = ({ procfile, appdir }) => {
   }
 };
 
+const getBranchViaRegex = (branch) => {
+  const branchName = execSync(
+    'git branch -a | grep -m 1 "' + branch + '"'
+  ).toString(); 
+
+  // return original name on no branch found
+  // error case already present at deployment
+  return !!branchName 
+    ? branchName
+    : branch;
+}
+
 const deploy = ({
   dontuseforce,
   app_name,
@@ -72,6 +84,7 @@ const deploy = ({
   dockerBuildArgs,
   appdir,
 }) => {
+  branch = getBranchViaRegex(branch);
   const force = !dontuseforce ? "--force" : "";
   if (usedocker) {
     execSync(
