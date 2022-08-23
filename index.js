@@ -18,7 +18,7 @@ EOF`;
 
 const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack }) => {
   try {
-    execSync("heroku git:remote --app " + app_name);
+    execSync("heroku git:remote --app " + app_name, { stdio: 'inherit' });
     console.log("Added git remote heroku");
   } catch (err) {
     if (dontautocreate) throw err;
@@ -29,7 +29,8 @@ const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack })
         (buildpack ? " --buildpack " + buildpack : "") +
         (region ? " --region " + region : "") +
         (stack ? " --stack " + stack : "") +
-        (team ? " --team " + team : "")
+        (team ? " --team " + team : ""),
+      { stdio: 'inherit' }
     );
   }
 };
@@ -76,11 +77,11 @@ const deploy = ({
   if (usedocker) {
     execSync(
       `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
-      appdir ? { cwd: appdir } : null
+      { cwd: appdir ? appdir : undefined , stdio: "inherit" }
     );
     execSync(
       `heroku container:release ${dockerHerokuProcessType} --app ${app_name}`,
-      appdir ? { cwd: appdir } : null
+      { cwd: appdir ? appdir : undefined , stdio: "inherit" }
     );
   } else {
     let remote_branch = execSync(
@@ -90,19 +91,21 @@ const deploy = ({
       .trim();
 
     if (remote_branch === "master") {
-      execSync("heroku plugins:install heroku-repo");
-      execSync("heroku repo:reset -a " + app_name);
+      execSync("heroku plugins:install heroku-repo", { stdio: 'inherit' });
+      execSync("heroku repo:reset -a " + app_name, { stdio: 'inherit' });
     }
 
     if (appdir === "") {
       execSync(`git push heroku ${branch}:refs/heads/main ${force}`, {
         maxBuffer: 104857600,
+        stdio: "inherit",
       });
     } else {
       execSync(
-        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/main`,
-        { maxBuffer: 104857600 }
-      );
+        `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/main`, {
+        maxBuffer: 104857600,
+        stdio: "inherit",
+      });
     }
   }
 };
@@ -115,7 +118,7 @@ const healthcheckFailed = ({
   if (rollbackonhealthcheckfailed) {
     execSync(
       `heroku rollback --app ${app_name}`,
-      appdir ? { cwd: appdir } : null
+      { cwd: appdir ? appdir : undefined , stdio: "inherit" }
     );
     core.setFailed(
       "Health Check Failed. Error deploying Server. Deployment has been rolled back. Please check your logs on Heroku to try and diagnose the problem"
