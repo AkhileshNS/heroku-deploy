@@ -94,7 +94,7 @@ jobs:
 
   deploy-test-5:
     runs-on: ubuntu-latest
-    needs: deploy-test-2
+    needs: deploy-test-3
     steps:
       - uses: actions/checkout@v2
       - run: npm run setup tests/test-3/data.json
