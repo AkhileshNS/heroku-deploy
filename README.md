@@ -1,5 +1,7 @@
 # Heroku Deploy
 
+[![Join the chat at https://gitter.im/akhileshns-heroku-deploy/community](https://badges.gitter.im/akhileshns-heroku-deploy/community.svg)](https://gitter.im/akhileshns-heroku-deploy/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![GitHub issues](https://img.shields.io/github/issues/AkhileshNS/heroku-deploy.svg)
 ![GitHub](https://img.shields.io/github/license/AkhileshNS/heroku-deploy.svg)
 ![Tests](https://github.com/AkhileshNS/heroku-deploy/workflows/Tests/badge.svg)
