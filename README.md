@@ -259,32 +259,7 @@ Though this is also possible to do with GitHub Actions, click [here](https://doc
 
 ### Deploy custom remote branch
 
-You can use the **remote_branch** option to deploy an app to another remote branch
-
-_.github/workflows/main.yml_
-
-```yaml
-name: Deploy
-
-on:
-  push:
-    branches:
-      - master # Changing the branch here would also work
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
-          heroku_email: "YOUR EMAIL"
-          remote_branch: "main"
-```
-
-Though this is also possible to do with GitHub Actions, click [here](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#on) for more information
+This is possible to do with GitHub Actions, click [here](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#on) for more information
 
 ### Set stack for your app
 
