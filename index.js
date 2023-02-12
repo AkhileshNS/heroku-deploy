@@ -2,6 +2,7 @@ const p = require("phin");
 const core = require("@actions/core");
 const { execSync } = require("child_process");
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
 
 // Support Functions
@@ -25,11 +26,11 @@ const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack })
 
     execSync(
       "heroku create " +
-        app_name +
-        (buildpack ? " --buildpack " + buildpack : "") +
-        (region ? " --region " + region : "") +
-        (stack ? " --stack " + stack : "") +
-        (team ? " --team " + team : "")
+      app_name +
+      (buildpack ? " --buildpack " + buildpack : "") +
+      (region ? " --region " + region : "") +
+      (stack ? " --stack " + stack : "") +
+      (team ? " --team " + team : "")
     );
   }
 };
@@ -159,8 +160,8 @@ if (heroku.appdir) {
     heroku.appdir[0] === "." && heroku.appdir[1] === "/"
       ? heroku.appdir.slice(2)
       : heroku.appdir[0] === "/"
-      ? heroku.appdir.slice(1)
-      : heroku.appdir;
+        ? heroku.appdir.slice(1)
+        : heroku.appdir;
 }
 
 // Collate docker build args into arg list
@@ -242,7 +243,7 @@ if (heroku.dockerBuildArgs) {
         if (res.statusCode !== 200) {
           throw new Error(
             "Status code of network request is not 200: Status code - " +
-              res.statusCode
+            res.statusCode
           );
         }
         if (heroku.checkstring && heroku.checkstring !== res.body.toString()) {
@@ -255,19 +256,21 @@ if (heroku.dockerBuildArgs) {
       }
     }
 
-    core.setOutput(
-      "status",
-      "Successfully deployed heroku app from branch " + heroku.branch
-    );
+    fs.appendFileSync(process.env.GITHUB_OUTPUT,
+      `status=Successfully deployed heroku app from branch ${heroku.branch}`,
+      {
+        encoding: 'utf8'
+      });
   } catch (err) {
     if (
       heroku.dontautocreate &&
       err.toString().includes("Couldn't find that app")
     ) {
-      core.setOutput(
-        "status",
-        "Skipped deploy to heroku app from branch " + heroku.branch
-      );
+      fs.appendFileSync(process.env.GITHUB_OUTPUT,
+        `status=Skipped deploy to heroku app from branch ${heroku.branch}`,
+        {
+          encoding: 'utf8'
+        });
     } else {
       core.setFailed(err.toString());
     }

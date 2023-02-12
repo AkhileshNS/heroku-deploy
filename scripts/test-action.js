@@ -13,7 +13,11 @@ setTimeout(() => {
         data.GITHUB_REPOSITORY === process.env.GITHUB_REPOSITORY &&
         data.GITHUB_REF === process.env.GITHUB_REF
       ) {
-        core.setOutput("status", "Test Success");
+        fs.appendFileSync(process.env.GITHUB_OUTPUT, 
+          `status="Test Success`, 
+        {
+          encoding: 'utf8'
+        })
       } else {
         core.setFailed("Test Failed: Please check logs to see source of error");
       }
