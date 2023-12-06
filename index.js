@@ -73,12 +73,13 @@ const deploy = ({
   appdir,
 }) => {
   const force = !dontuseforce ? "--force" : "";
+  let output = "";
   if (usedocker) {
-    execSync(
+    output = execSync(
       `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
       appdir ? { cwd: appdir } : null
     );
-    execSync(
+    output += execSync(
       `heroku container:release ${dockerHerokuProcessType} --app ${app_name}`,
       appdir ? { cwd: appdir } : null
     );
@@ -90,21 +91,22 @@ const deploy = ({
       .trim();
 
     if (remote_branch === "master") {
-      execSync("heroku plugins:install heroku-repo");
-      execSync("heroku repo:reset -a " + app_name);
+      output += execSync("heroku plugins:install heroku-repo");
+      output += execSync("heroku repo:reset -a " + app_name);
     }
 
     if (appdir === "") {
-      execSync(`git push heroku ${branch}:refs/heads/main ${force}`, {
+      output += execSync(`git push heroku ${branch}:refs/heads/main ${force}`, {
         maxBuffer: 104857600,
       });
     } else {
-      execSync(
+      output += execSync(
         `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/main`,
         { maxBuffer: 104857600 }
       );
     }
   }
+  core.setOutput('output', output);
 };
 
 const healthcheckFailed = ({
