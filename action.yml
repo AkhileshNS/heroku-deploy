@@ -87,5 +87,5 @@ outputs:
   status:
     description: "The Success/Failure of the action"
 runs:
-  using: "node16"
+  using: "node18"
   main: "index.js"
