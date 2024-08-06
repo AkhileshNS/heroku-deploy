@@ -16,9 +16,16 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack }) => {
+const addRemote = ({
+  app_name,
+  dontautocreate,
+  buildpack,
+  region,
+  team,
+  stack,
+}) => {
   try {
-    execSync("heroku git:remote --app " + app_name);
+    execSync("npx heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
   } catch (err) {
     if (dontautocreate) throw err;
@@ -51,7 +58,7 @@ const addConfig = ({ app_name, env_file, appdir }) => {
     configVars = [...configVars, ...newVars];
   }
   if (configVars.length !== 0) {
-    execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
+    execSync(`npx heroku config:set --app=${app_name} ${configVars.join(" ")}`);
   }
 };
 
@@ -73,13 +80,14 @@ const deploy = ({
   appdir,
 }) => {
   const force = !dontuseforce ? "--force" : "";
+
   if (usedocker) {
     execSync(
-      `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
+      `npx heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
       appdir ? { cwd: appdir } : null
     );
     execSync(
-      `heroku container:release ${dockerHerokuProcessType} --app ${app_name}`,
+      `npx heroku container:release ${dockerHerokuProcessType} --app ${app_name}`,
       appdir ? { cwd: appdir } : null
     );
   } else {
@@ -90,8 +98,8 @@ const deploy = ({
       .trim();
 
     if (remote_branch === "master") {
-      execSync("heroku plugins:install heroku-repo");
-      execSync("heroku repo:reset -a " + app_name);
+      execSync("npx heroku plugins:install heroku-repo");
+      execSync("npx heroku repo:reset -a " + app_name);
     }
 
     if (appdir === "") {
@@ -114,7 +122,7 @@ const healthcheckFailed = ({
 }) => {
   if (rollbackonhealthcheckfailed) {
     execSync(
-      `heroku rollback --app ${app_name}`,
+      `npx heroku rollback --app ${app_name}`,
       appdir ? { cwd: appdir } : null
     );
     core.setFailed(
@@ -177,6 +185,9 @@ if (heroku.dockerBuildArgs) {
 (async () => {
   // Program logic
   try {
+    console.log("Checking heroku version");
+    execSync("npx heroku -v");
+
     // Just Login
     if (heroku.justlogin) {
       execSync(createCatFile(heroku));
@@ -185,15 +196,16 @@ if (heroku.dockerBuildArgs) {
       return;
     }
 
-    execSync(`git config user.name "Heroku-Deploy"`);
-    execSync(`git config user.email "${heroku.email}"`);
-    const status = execSync("git status --porcelain").toString().trim();
-    if (status) {
-      execSync(
-        'git add -A && git commit -m "Commited changes from previous actions"'
-      );
+    if (!heroku.usedocker) {
+      execSync(`git config user.name "Heroku-Deploy"`);
+      execSync(`git config user.email "${heroku.email}"`);
+      const status = execSync("git status --porcelain").toString().trim();
+      if (status) {
+        execSync(
+          'git add -A && git commit -m "Commited changes from previous actions"'
+        );
+      }
     }
-
     // Check if using Docker
     if (!heroku.usedocker) {
       // Check if Repo clone is shallow
@@ -208,17 +220,22 @@ if (heroku.dockerBuildArgs) {
     }
 
     execSync(createCatFile(heroku));
+    console.log("Successfully logged into heroku");
+
+    if (heroku.usedocker) {
+      execSync(`npx heroku container:login`);
+    }
+
     console.log("Created and wrote to ~/.netrc");
 
     createProcfile(heroku);
 
-    if (heroku.usedocker) {
-      execSync("heroku container:login");
-    }
-    console.log("Successfully logged into heroku");
-
     addRemote(heroku);
     addConfig(heroku);
+
+    if (heroku.usedocker) {
+      execSync(`npx heroku stack:set container`);
+    }
 
     try {
       deploy({ ...heroku, dontuseforce: true });
