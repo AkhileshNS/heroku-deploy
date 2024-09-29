@@ -1,0 +1,9 @@
+autopep8==1.4.4
+Click==7.0
+Flask==1.1.1
+gunicorn==19.10.0
+itsdangerous==1.1.0
+Jinja2==2.10.3
+MarkupSafe==1.1.1
+pycodestyle==2.5.0
+Werkzeug==0.16.0
