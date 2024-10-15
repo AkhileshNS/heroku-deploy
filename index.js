@@ -73,9 +73,11 @@ const deploy = ({
   appdir,
 }) => {
   const force = !dontuseforce ? "--force" : "";
+  const recursive = (Object.prototype.toString.call(dockerHerokuProcessType) === '[object String]'
+   && dockerHerokuProcessType.indexOf(' ') >= 0) ? "--recursive" : "";
   if (usedocker) {
     execSync(
-      `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
+      `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs} ${recursive}`,
       appdir ? { cwd: appdir } : null
     );
     execSync(
