@@ -1,0 +1,75 @@
+{
+	"version": "v1.0.0",
+	"entity": {
+		"type": "individual",
+		"role": "owner",
+		"name": "AkhileshNS",
+		"email": "nsakhilesh02@gmail.com",
+		"phone": "",
+		"description": "Heyyo, my name is Akhilesh. I'm a software engineer trying to build useful tools for the community. Most of my work usually revolves around the web but I tend to build towards whatever fascinates me. Please support my work here 🙏. Much appreciated",
+		"webpageUrl": {
+			"url": "https://github.com/AkhileshNS",
+			"wellKnown": ""
+		}
+	},
+	"projects": [
+		{
+			"guid": "heroku-deploy",
+			"name": "Heroku Deploy",
+			"description": "This is a very simple GitHub action that allows you to deploy to Heroku",
+			"webpageUrl": {
+				"url": "https://github.com/AkhileshNS/heroku-deploy"
+			},
+			"repositoryUrl": {
+				"url": "https://github.com/AkhileshNS/heroku-deploy",
+				"wellKnown": ""
+			},
+			"licenses": [
+				"MIT"
+			],
+			"tags": [
+				"github",
+				"heroku",
+				"heroku-deployment",
+				"github-actions"
+			]
+		}
+	],
+	"funding": {
+		"channels": [
+			{
+				"guid": "github",
+				"type": "other",
+				"address": "https://github.com/sponsors/AkhileshNS",
+				"description": "You can support me through GitHub Sponsors"
+			}
+		],
+		"plans": [
+			{
+				"guid": "developer-time",
+				"status": "active",
+				"name": "Developer compensation",
+				"description": "This will support a part-time software developer working on Heroku Deploy: Fixing issues, keeping the tool updated, etc.",
+				"amount": 1000,
+				"currency": "USD",
+				"frequency": "monthly",
+				"channels": [
+					"github"
+				]
+			},
+			{
+				"guid": "hosting-monthly",
+				"status": "active",
+				"name": "Heroku hosting support",
+				"description": "This will cover the monthly Heroku hosting costs for testing that the tool properly deploys to Heroku",
+				"amount": 20,
+				"currency": "USD",
+				"frequency": "monthly",
+				"channels": [
+					"github"
+				]
+			}
+		],
+		"history": []
+	}
+}
