@@ -41,7 +41,7 @@ jobs:
           # markdownfile: docs/github-dependents-info.md
           # badgemarkdownfile: README.md
           # sort: stars
-          # minstars: "0"
+          minstars: "1"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
