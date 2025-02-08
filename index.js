@@ -151,6 +151,7 @@ let heroku = {
   region: core.getInput("region"),
   stack: core.getInput("stack"),
   team: core.getInput("team"),
+  git_crypt_key: core.getInput("git_crypt_key"),
 };
 
 // Formatting
@@ -177,21 +178,23 @@ if (heroku.dockerBuildArgs) {
 (async () => {
   // Program logic
   try {
-    // Just Login
-    if (heroku.justlogin) {
-      execSync(createCatFile(heroku));
-      console.log("Created and wrote to ~/.netrc");
+    if(!heroku.git_crypt_key) {
+      // Just Login
+      if (heroku.justlogin) {
+        execSync(createCatFile(heroku));
+        console.log("Created and wrote to ~/.netrc");
 
-      return;
-    }
+        return;
+      }
 
-    execSync(`git config user.name "Heroku-Deploy"`);
-    execSync(`git config user.email "${heroku.email}"`);
-    const status = execSync("git status --porcelain").toString().trim();
-    if (status) {
-      execSync(
-        'git add -A && git commit -m "Commited changes from previous actions"'
-      );
+      execSync(`git config user.name "Heroku-Deploy"`);
+      execSync(`git config user.email "${heroku.email}"`);
+      const status = execSync("git status --porcelain").toString().trim();
+      if (status) {
+        execSync(
+          'git add -A && git commit -m "Commited changes from previous actions"'
+        );
+      }
     }
 
     // Check if using Docker
