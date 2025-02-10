@@ -24,6 +24,10 @@ inputs:
     description: "Set this to true if you don't want to use --force when switching branches"
     default: "false"
     required: false
+  useforce:
+    description: "Set this to true if you want to use --force when switching branches"
+    default: "false"
+    required: false
   dontautocreate:
     description: "Set this to true if you don't want to automatically create the Heroku app"
     default: "false"
