@@ -34,6 +34,13 @@ const addRemote = ({ app_name, dontautocreate, buildpack, region, team, stack })
   }
 };
 
+const addStack = ({ stack }) => {
+  if (stack) {
+    execSync("heroku stack:set " + stack);
+    console.log("Changed stack to " + stack);
+  }
+};
+
 const addConfig = ({ app_name, env_file, appdir }) => {
   let configVars = [];
   for (let key in process.env) {
@@ -219,6 +226,7 @@ if (heroku.dockerBuildArgs) {
 
     addRemote(heroku);
     addConfig(heroku);
+    addStack(heroku);
 
     try {
       deploy({ ...heroku, dontuseforce: true });
