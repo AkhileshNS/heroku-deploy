@@ -77,12 +77,17 @@ const deploy = ({
   usedocker,
   dockerHerokuProcessType,
   dockerBuildArgs,
+  dockerContextPath,
+  dockerFindRecursive,
   appdir,
 }) => {
   const force = !dontuseforce ? "--force" : "";
   if (usedocker) {
+    const recursiveFlag = dockerFindRecursive ? "--recursive" : "";
+    const contextPathFlag = dockerContextPath ? `--context-path ${dockerContextPath}` : "";
+    
     execSync(
-      `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
+      `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs} ${recursiveFlag} ${contextPathFlag}`.trim().replace(/\s+/g, ' '),
       appdir ? { cwd: appdir } : null
     );
     execSync(
@@ -146,6 +151,8 @@ let heroku = {
   usedocker: core.getInput("usedocker") === "false" ? false : true,
   dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
   dockerBuildArgs: core.getInput("docker_build_args"),
+  dockerContextPath: core.getInput("docker_context_path"),
+  dockerFindRecursive: core.getInput("docker_find_recursive") === "false" ? false : true,
   appdir: core.getInput("appdir"),
   healthcheck: core.getInput("healthcheck"),
   checkstring: core.getInput("checkstring"),

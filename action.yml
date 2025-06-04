@@ -39,6 +39,14 @@ inputs:
   docker_build_args:
     description: "A list of args to pass into the Docker build. This option only makes sense when usedocker enabled"
     required: false
+  docker_context_path:
+    description: "Path to use as build context (defaults to Dockerfile dir). This option only makes sense when usedocker enabled"
+    required: false
+    default: ""
+  docker_find_recursive:
+    description: "Pushes Dockerfile.<process> found in current and subdirectories. This option only makes sense when usedocker enabled"
+    required: false
+    default: "false"
   appdir:
     description: "Set if your app is located in a subdirectory."
     default: ""

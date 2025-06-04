@@ -1,6 +1,6 @@
 {
   "name": "heroku-deploy",
-  "version": "3.13.15",
+  "version": "3.13.16",
   "description": "A simple github action that dynamically deploys an app to heroku",
   "main": "index.js",
   "scripts": {

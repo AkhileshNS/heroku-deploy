@@ -100,6 +100,8 @@ The action comes with additional options that you can use to configure your proj
 | usedocker                   | false    | Will deploy using Dockerfile in project root                                                                                                                                                        | true or false                                         |
 | docker_heroku_process_type  | false    | Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled. Defaults to "web" (Thanks to [singleton11](https://github.com/singleton11) for adding this feature) | web, worker                                           |
 | docker_build_args           | false    | A list of args to pass into the Docker build. This option only makes sense when usedocker enabled.                                                                                                  | NODE_ENV                                              |
+| docker_context_path         | false    | Path to use as build context (defaults to Dockerfile dir). This option only makes sense when usedocker enabled.                                                                                    | ./src, ./backend                                      |
+| docker_find_recursive       | false    | Pushes Dockerfile.<process> found in current and subdirectories. This option only makes sense when usedocker enabled.                                                                              | true or false                                         |
 | appdir                      | false    | Set if your app is located in a subdirectory                                                                                                                                                        | api, apis/python                                      |
 | healthcheck                 | false    | A URL to which a healthcheck is performed (checks for 200 request)                                                                                                                                  | https://demo-rest-api.herokuapp.com                   |
 | checkstring                 | false    | Value to check for when conducting healthcheck requests                                                                                                                                             | ok                                                    |
@@ -181,6 +183,73 @@ jobs:
 ```
 
 Also, thanks to [Olav Sundfør](https://github.com/olaven) for adding the Docker feature and [Matt Stavola](https://github.com/mbStavola) for adding the ability to pass in build args.
+
+#### Deploy with Docker Context Path
+
+If your Dockerfile is not located in the root directory or you need to specify a custom build context (the root in case of a monorepo), you can use the `docker_context_path` option:
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+      - uses: akhileshns/heroku-deploy@v3.14.15
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME"
+          heroku_email: "YOUR EMAIL"
+          usedocker: true
+          docker_context_path: "."
+          docker_find_recursive: true
+          docker_heroku_process_type: "worker" # Specify the process type if needed
+```
+
+#### Deploy with Multiple Docker Processes (Recursive)
+
+To deploy multiple Docker containers from different subdirectories (using `Dockerfile.web`, `Dockerfile.worker`, etc.), use the `docker_find_recursive` option:
+
+_.github/workflows/main.yml_
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+      - uses: akhileshns/heroku-deploy@v3.14.15
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "YOUR APP's NAME"
+          heroku_email: "YOUR EMAIL"
+          usedocker: true
+          docker_find_recursive: true
+          docker_heroku_process_type: "web worker"
+```
+
+This will look for `Dockerfile.web` and `Dockerfile.worker` in the current directory and subdirectories.
 
 ### Deploy with custom Buildpacks
 
@@ -678,6 +747,8 @@ jobs:
 - By default, if you don't specify a branch in your action, it will default to the HEAD branch (or whichever branch the action is defined under). So you might be wondering what happens if you define the same action in a different branch under the same heroku app name (or which you try to deploy to the same appname from a different branch)? The answer is that the new branch overrides whatever your old branch was (even if the new branch is behind the old branch in terms of commits unless you set dontuseforce to true)
 
 - For more info on how Heroku enables deployment using Docker, check out [https://www.heroku.com/deploy-with-docker](https://www.heroku.com/deploy-with-docker)
+
+- For more information about Docker container deployment options, including `docker_context_path` and `docker_find_recursive`, see the [Heroku Container Registry & Runtime documentation](https://devcenter.heroku.com/articles/container-registry-and-runtime)
 
 ## License
 
