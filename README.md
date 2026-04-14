@@ -55,7 +55,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh 
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -136,7 +136,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -166,7 +166,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -208,7 +208,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -238,7 +238,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -270,7 +270,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -302,7 +302,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -336,7 +336,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -368,7 +368,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -402,7 +402,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -435,7 +435,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -468,7 +468,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -504,7 +504,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -542,7 +542,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -592,7 +592,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME" #Must be unique in Heroku
@@ -624,7 +624,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15
+      - uses: akhileshns/heroku-deploy@v3.15.15
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "YOUR APP's NAME"
@@ -654,7 +654,7 @@ jobs:
       - name: Install Heroku CLI # <- IMPORTANT!!! Make sure the cli is installed before using the action
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.15.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ""
