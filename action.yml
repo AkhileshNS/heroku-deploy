@@ -1,4 +1,4 @@
-name: "Deploy to Heroku"
+name: "Deploy to Heroku - git-crypt"
 description: "Deploy an app to Heroku"
 branding:
   icon: "upload-cloud"
@@ -81,6 +81,10 @@ inputs:
     default: ""
   team:
     description: "If deploying to an organization, then specify the name of the team or organization here"
+    required: false
+    default: ""
+  git_crypt_key:
+    description: "git-crypt secret key"
     required: false
     default: ""
 outputs:
