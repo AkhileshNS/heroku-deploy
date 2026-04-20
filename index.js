@@ -78,11 +78,17 @@ const deploy = ({
   dockerHerokuProcessType,
   dockerBuildArgs,
   appdir,
+  userecursive,
+  context_path,
 }) => {
   const force = !dontuseforce ? "--force" : "";
   if (usedocker) {
     execSync(
-      `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
+      `heroku container:push ${dockerHerokuProcessType} ${
+        userecursive ? "--recursive" : null
+      } ${
+        context_path ? `--context-path ${context_path}` : null
+      } --app ${app_name} ${dockerBuildArgs}`,
       appdir ? { cwd: appdir } : null
     );
     execSync(
@@ -158,6 +164,8 @@ let heroku = {
   region: core.getInput("region"),
   stack: core.getInput("stack"),
   team: core.getInput("team"),
+  userecursive: core.getInput("userecursive") === "false" ? false : true,
+  context_path: core.getInput("context_path"),
 };
 
 // Formatting
