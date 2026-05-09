@@ -47,6 +47,10 @@ inputs:
     description: "A URL to which a healthcheck is performed (checks for 200 request)"
     required: false
     default: ""
+  healthcheckretries:
+    description: "Number of times to try the healthcheck"
+    required: false
+    default: "1"
   checkstring:
     description: "Value to check for when conducting healthcheck request"
     required: false
