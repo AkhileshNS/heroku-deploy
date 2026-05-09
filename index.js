@@ -142,6 +142,7 @@ let heroku = {
   buildpack: core.getInput("buildpack"),
   branch: core.getInput("branch"),
   dontuseforce: core.getInput("dontuseforce") === "false" ? false : true,
+  useforce: core.getInput("useforce") === "true" ? true : false,
   dontautocreate: core.getInput("dontautocreate") === "false" ? false : true,
   usedocker: core.getInput("usedocker") === "false" ? false : true,
   dockerHerokuProcessType: core.getInput("docker_heroku_process_type"),
@@ -229,7 +230,7 @@ if (heroku.dockerBuildArgs) {
     addStack(heroku);
 
     try {
-      deploy({ ...heroku, dontuseforce: true });
+      deploy({ ...heroku, dontuseforce: !heroku.useforce });
     } catch (err) {
       console.error(`
             Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. 
@@ -237,7 +238,9 @@ if (heroku.dockerBuildArgs) {
             Specifically, the error was: ${err}
         `);
 
-      deploy(heroku);
+      if (!heroku.useforce && !heroku.dontuseforce) {
+        deploy(heroku);
+      }
     }
 
     if (heroku.healthcheck) {
