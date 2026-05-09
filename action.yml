@@ -36,6 +36,10 @@ inputs:
     description: "Type of heroku process (web, worker, etc). This option only makes sense when usedocker enabled"
     default: "web"
     required: false
+  docker_heroku_push_recursive:
+    description: "To push one or all dedicated process type Dockerfiles e.g. `Dockerfile.web` for web. This option only makes sense when usedocker enabled"
+    default: "false"
+    required: false
   docker_build_args:
     description: "A list of args to pass into the Docker build. This option only makes sense when usedocker enabled"
     required: false
