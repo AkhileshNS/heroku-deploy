@@ -39,7 +39,7 @@ export const deployGit = (heroku: IHeroku, shouldThrowError = false) => {
     ? `\`git subtree split --prefix=${heroku.appdir} ${heroku.branch}\``
     : heroku.branch
   try {
-    const output = execSync(`git push ${force} heroku ${finalBranch}:refs/head/main`, { maxBuffer: 104857600 }).toString();
+    const output = execSync(`git push ${force} heroku ${finalBranch}:refs/heads/main`, { maxBuffer: 104857600 }).toString();
     if (output.toLowerCase().includes(error_outputs.SKIPPED_WRONG_BRANCH)) {
       throw new Error(`
         Unable to deploy code because the deployed branch is not 'main' or 'master' 
